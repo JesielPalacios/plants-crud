@@ -1,6 +1,20 @@
+# plants-crud
+plants-crud frontend web application project developed in React.
+
+## Relevant information
+This is a frontend web application project developed in React.
+
+* Developed with React 18+^
+* Developed with Styled-Components
+* Developed with Material UI
+* Developed with React Router DOM
+* Developed with React HELMET
+* Developed with React REDUX - REDUX THUNK
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+It runs in local, even you can to upload the backend API in the cloud and consume it from there
 
 ## Available Scripts
 
