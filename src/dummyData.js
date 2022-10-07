@@ -168,7 +168,7 @@ export const userData = [
     },
     {
       id: 2,
-      name: "Apple Airpods",
+      name: "Producto x",
       img: "https://images.pexels.com/photos/7156886/pexels-photo-7156886.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",
       stock: 123,
       status: "active",

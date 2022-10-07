@@ -1,14 +1,17 @@
-import styled from "styled-components";
+import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 
 export function Header() {
   return (
     <Container>
       <div>
-        <span>Warehouse Receipts</span>
+        <span>
+          <Link to="/plants">Warehouse Receipts</Link>
+        </span>
       </div>
       <div></div>
     </Container>
-  );
+  )
 }
 
 const Container = styled.header`
@@ -36,4 +39,4 @@ const Container = styled.header`
   transition: border-color 0.5s, background-color 0.5s;
   background: rgba(255, 255, 255, 0.7);
   font-weight: 500;
-`;
+`
