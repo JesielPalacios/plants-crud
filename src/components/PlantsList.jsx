@@ -15,11 +15,10 @@ export default function PlantsList() {
   // }
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
     {
       field: 'name',
       headerName: 'Plant name',
-      width: 200,
+      width: 160,
       renderCell: (params) => {
         return (
           <div className="productListItem">
@@ -27,9 +26,14 @@ export default function PlantsList() {
               className="productListImg"
               // src="https://via.placeholder.com/520x460"
               src="https://www.elmueble.com/medio/2019/01/22/plantas-medicinales-valeriana_6340d15a_543x543.jpg"
-              alt="plant avatar"
+              alt="plant avatar image"
             />
-            {params.row.name}
+            {params.row.name
+              .trim()
+              .toLowerCase()
+              .replace(/\w\S*/g, (w) =>
+                w.replace(/^\w/, (c) => c.toUpperCase())
+              )}
           </div>
         )
       },
@@ -38,11 +42,29 @@ export default function PlantsList() {
       field: 'createdAt',
       headerName: 'Creation date',
       width: 120,
+      renderCell: (params) => {
+        return (
+          <div className="productListItem">
+            {params.row.createdAt.slice(8, 10)} -
+            {params.row.createdAt.slice(5, 7)} -
+            {params.row.createdAt.slice(0, 4)}
+          </div>
+        )
+      },
     },
     {
       field: 'discoveredAt',
       headerName: 'Discovery date',
       width: 125,
+      renderCell: (params) => {
+        return (
+          <div className="productListItem">
+            {params.row.discoveredAt.slice(8, 10)} -
+            {params.row.discoveredAt.slice(5, 7)} -
+            {params.row.discoveredAt.slice(0, 4)}
+          </div>
+        )
+      },
     },
     {
       field: 'benefits',
@@ -125,7 +147,7 @@ export default function PlantsList() {
             showColumnRightBorder={true}
             getRowId={(row) => row._id}
             loading={loading}
-            rowsPerPageOptions={[10]}
+            // rowsPerPageOptions={[10]}
           />
         )}
       </div>

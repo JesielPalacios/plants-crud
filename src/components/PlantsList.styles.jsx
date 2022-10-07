@@ -80,7 +80,7 @@ export const Container = styled.div`
       background-color: rgba(0, 128, 0, 0.05);
       color: green;
     }
-    &.Not {
+    &.No {
       background-color: rgba(255, 0, 0, 0.05);
       color: crimson;
     }
