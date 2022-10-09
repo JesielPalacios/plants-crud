@@ -1,10 +1,11 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  margin-top: 50px;
+  /* margin-top: 50px; */
   width: 100%;
-  /* height: 100vh; */
-  margin: 50px 0;
+  /* height: 90vh; */
+  /* margin: 50px 0; */
+  transform: translateY(120px);
 
   background-color: #fff;
   border-radius: 10px;
@@ -14,7 +15,7 @@ export const Container = styled.div`
 
   .productList {
     flex: 4;
-    height: 90vh;
+    height: 80vh;
   }
 
   .productListItem {
@@ -65,11 +66,13 @@ export const Container = styled.div`
 
   .MuiDataGrid-row:hover {
     /* background-color: #000000b1; */
-    :hover {
+    /* :hover {
       background-color: #0000005d;
       background-color: #0f1141da;
       background-color: #0f114195;
-    }
+      background-color: #51538b94;
+      background-color: #9697af;
+    } */
   }
 
   .cellWithStatus {

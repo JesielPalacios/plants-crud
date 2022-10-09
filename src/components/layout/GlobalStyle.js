@@ -8,6 +8,10 @@ export const GlobalStyle = createGlobalStyle`
     font-family: Poppins;
   }
 
+  body {
+    background-color: #E5E5E5
+  }
+
 main {
   /* width: 95%; */
   padding: 0 25px;
@@ -24,4 +28,4 @@ a {
   text-decoration: none;
   color: black;
 }
-`;
+`

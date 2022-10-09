@@ -34,29 +34,19 @@ export async function getPlantService(dispatch, id) {
   }
 }
 
-export async function createPlantservice(dispatch, PlantData) {
+export async function createPlantService(dispatch, PlantData) {
+  console.log('PlantData', PlantData)
+  
   dispatch(loading())
   const formData = new FormData()
-  formData.append('firstName', PlantData.firstName.value)
-  formData.append('secondName', PlantData.secondName.value)
-  formData.append('firstSurname', PlantData.firstSurname.value)
-  formData.append('secondSurname', PlantData.secondSurname.value)
-  formData.append('gender', PlantData.gender.value)
-  formData.append(
-    'typeCitizenshipNumberId',
-    PlantData.typeCitizenshipNumberId.value
-  )
-  formData.append('citizenshipNumberId', PlantData.citizenshipNumberId.value)
-  formData.append('academicProgram', PlantData.academicProgram.value)
-  formData.append('studentCode', PlantData.studentCode.value)
-  formData.append('semester', PlantData.semester.value)
-  formData.append('email', PlantData.email.value)
-  formData.append('cellPhoneNumber', PlantData.cellPhoneNumber.value)
-  formData.append('address', PlantData.address.value)
-  formData.append('dateOfBirth', PlantData.dateOfBirth.value)
-  formData.append('birthCountry', PlantData.birthCountry.value)
-  formData.append('birthDepartment', PlantData.birthDepartment.value)
-  formData.append('birthCity', PlantData.birthCity.value)
+  await formData.append('name', PlantData.name)
+  await  formData.append('discoveredAt', PlantData.discoveredAt)
+  await  formData.append('benefits', PlantData.benefits)
+  await  formData.append('medicinal', PlantData.medicinal)
+  await  formData.append('flower', PlantData.flower)
+  await  formData.append('maximumHeight', PlantData.maximumHeight)
+  await  formData.append('model', PlantData.model)
+  await  formData.append('weight', PlantData.weight)
 
   try {
     const res = await axios.post('http://localhost:3001/api/Plants', formData, {
@@ -65,9 +55,9 @@ export async function createPlantservice(dispatch, PlantData) {
       },
     })
 
-    dispatch(resetFlags())
+    // dispatch(resetFlags())
     // return res
-    console.log('res', res)
+    console.log('res', res.data)
   } catch (err) {
     dispatch(getPlant({}))
     console.log('error', err)

@@ -3,13 +3,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getPlantService } from '../services/plant.service'
-import {
-  Button,
-  Container,
-  Link,
-  LoadingWrapper,
-  Spinner,
-} from './Plant.styles'
+import { Button, Container, Link, Loading } from './Plant.styles'
 import { Seo } from './layout/Seo'
 
 export default function Plant() {
@@ -20,39 +14,28 @@ export default function Plant() {
 
   useEffect(() => {
     getPlantService(dispatch, plantId)
-    console.log('plant', plant)
   }, [])
 
   return (
     <Container>
       <Seo
         title={
+          plant.name &&
           plant.name
-          // .trim()
-          // .toLowerCase()
-          // .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()))
+            .trim()
+            .toLowerCase()
+            .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()))
         }
         subtitle="Plant profile"
       />
 
+      <Button>Delete this plant</Button>
       <Link to="/plants">Go to plants</Link>
-      <Button>Delete plant</Button>
 
-      {loading && (
-        <LoadingWrapper>
-          <Spinner>
-            <div className="lds-ring">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </Spinner>
-        </LoadingWrapper>
-      )}
+      {loading && <Loading />}
 
       <div className="scroll">
-        {error && 'Hubo un error'}
+        {error && 'Something went wrong'}
 
         {!(loading && error) && (
           <>
@@ -73,30 +56,22 @@ export default function Plant() {
                         plant.name
                           .trim()
                           .toLowerCase()
-                          .replace(/\w\S*/g, (w) =>
-                            w.replace(/^\w/, (c) => c.toUpperCase())
-                          )}
+                          .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()))}
                     </h1>
-                    <div className="detailItem">
-                      <span className="itemKey">Discovered at:</span>
-                      <span className="itemValue">
-                        {plant.discoveredAt && (
-                          <div>
-                            {plant.discoveredAt.slice(8, 10)} -
-                            {plant.discoveredAt.slice(5, 7)} -
-                            {plant.discoveredAt.slice(0, 4)}
-                          </div>
-                        )}
-                      </span>
-                    </div>
+                    {plant.discoveredAt && (
+                      <div className="detailItem">
+                        <span className="itemKey">Discovered at:</span>
+                        <span className="itemValue">
+                          {plant.discoveredAt.slice(8, 10)} - {plant.discoveredAt.slice(5, 7)} - {plant.discoveredAt.slice(0, 4)}
+                        </span>
+                      </div>
+                    )}
                     <div className="detailItem">
                       <span className="itemKey">Is the plant medicinal?: </span>
                       <span className="itemValue">{plant.medicinal}</span>
                     </div>
                     <div className="detailItem">
-                      <span className="itemKey">
-                        Does the plant have a floor?:
-                      </span>
+                      <span className="itemKey">Does the plant have a floor?:</span>
                       <span className="itemValue">{plant.flower}</span>
                     </div>
                   </div>
@@ -104,10 +79,7 @@ export default function Plant() {
               </div>
 
               <div className="left">
-                <div
-                  className="editButton"
-                  onClick={() => navigate('/plant/' + plantId + '/editar')}
-                >
+                <div className="editButton" onClick={() => navigate('/plant/' + plantId + '/edit')}>
                   Edit the information about the plant
                 </div>
                 <h1 className="title">Details</h1>

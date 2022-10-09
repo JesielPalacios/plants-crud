@@ -8,6 +8,7 @@ import {
 
 import { GlobalStyle } from '../../components/layout/GlobalStyle'
 import { Layout } from '../../components/layout/Layout'
+import { LoadingWrapper, Spinner } from '../../components/Plant.styles'
 
 const PlantsList = React.lazy(() => import('../../components/PlantsList'))
 const Plant = React.lazy(() => import('../../components/Plant'))
@@ -17,7 +18,20 @@ const PlantAddOrEdit = React.lazy(() =>
 
 export const AppRouter = () => {
   return (
-    <Suspense fallback="Loading...">
+    <Suspense
+      fallback={
+        <LoadingWrapper>
+          <Spinner>
+            <div className="lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </Spinner>
+        </LoadingWrapper>
+      }
+    >
       <GlobalStyle />
 
       <Router>

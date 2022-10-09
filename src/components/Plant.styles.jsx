@@ -2,19 +2,31 @@
 import { Link as LinkRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
+export function Loading() {
+  return (
+    <LoadingWrapper>
+      <Spinner>
+        <div className="lds-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </Spinner>
+    </LoadingWrapper>
+  )
+}
+
 export const Container = styled.div`
-  margin-top: 75px;
   width: 100%;
-  height: 100vh;
-  margin: 50px 0;
+  height: 100%;
+  /* margin: 50px 0; */
+  transform: translateY(120px);
 
-  background-color: #fff;
-  border-radius: 10px;
-
-  -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-
-
+  /* background-color: #fff; */
+  /* border-radius: 10px; */
+  /* -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47); */
+  /* box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47); */
 
   .top {
     /* padding: 20px; */
@@ -60,6 +72,9 @@ export const Container = styled.div`
         }
 
         .details {
+          flex: 1;
+          /*  */
+          /*  */
           .itemTitle {
             margin-bottom: 10px;
             color: #555;
@@ -116,50 +131,54 @@ export const Container = styled.div`
 
 export const Link = styled(LinkRouter)`
   position: absolute;
-  top: ${({ top }) => (top ? top : '-50px')};
-  right: ${({ right }) => (right ? right : '200px')};
+  top: ${({ top }) => (top ? top : '-55px')};
+  right: ${({ right }) => (right ? right : '0')};
   text-decoration: none;
-
+  
   border: none;
   // height: 100%;
   margin: 0px;
   border-radius: 0.5rem;
+  border-radius: 10px;
   padding: 0.5rem 1rem;
   font-weight: 600;
-  border: 1px solid #f5a800;
+  border: 1px solid #0F1141;
   background: none;
   // color: #f5a800;
   cursor: pointer;
   transition: all 500ms ease 0s;
   color: #000;
+  font-size: 15px;
 
   :hover {
-    background-color: #f5a800;
+    background-color: #0F1141;
     color: #ffffff;
   }
 `
 
 export const Button = styled.button`
   position: absolute;
-  top: ${({ top }) => (top ? top : '-50px')};
-  right: ${({ right }) => (right ? right : '5px')};
+  top: ${({ top }) => (top ? top : '-55px')};
+  right: ${({ right }) => (right ? right : '145px')};
 
   border: none;
   // height: 100%;
   margin: 0px;
   border-radius: 0.5rem;
+  border-radius: 10px;
   padding: 0.5rem 1rem;
   font-weight: 600;
-  border: 1px solid #f5a800;
+  border: 1px solid #0F1141;
   /* background: #f5f5f5; */
   /* background: #eeeeee; */
   background: none;
   // color: #f5a800;
   cursor: pointer;
   transition: all 500ms ease 0s;
+  font-size: 15px;
 
   :hover {
-    background-color: #f5a800;
+    background-color: #0F1141;
     color: #ffffff;
   }
 `
@@ -175,11 +194,11 @@ export const LoadingWrapper = styled.div`
   flex-direction: column;
 `
 
-const Loading = styled.span`
-  color: #000;
-  padding: 0.5em;
-  font-size: 2em;
-`
+// const Loading = styled.span`
+//   color: #000;
+//   padding: 0.5em;
+//   font-size: 2em;
+// `
 
 export const Spinner = styled.div`
   .lds-ring {
@@ -217,5 +236,4 @@ export const Spinner = styled.div`
       transform: rotate(360deg);
     }
   }
-
 `

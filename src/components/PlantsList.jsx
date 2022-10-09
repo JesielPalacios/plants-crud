@@ -1,12 +1,13 @@
 import { DataGrid } from '@mui/x-data-grid'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { productRows } from '../dummyData'
-import { Link } from 'react-router-dom'
+import { Link as LinkRouter} from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { Seo } from './layout/Seo'
 import { getAllPlantsService } from '../services/plant.service'
 import { useDispatch, useSelector } from 'react-redux'
 import { Container } from './PlantsList.styles'
+import { Link, Loading } from './Plant.styles'
 
 export default function PlantsList() {
   // const [data, setData] = useState([])
@@ -18,7 +19,7 @@ export default function PlantsList() {
     {
       field: 'name',
       headerName: 'Plant name',
-      width: 160,
+      width: 179,
       renderCell: (params) => {
         return (
           <div className="productListItem">
@@ -31,9 +32,7 @@ export default function PlantsList() {
             {params.row.name
               .trim()
               .toLowerCase()
-              .replace(/\w\S*/g, (w) =>
-                w.replace(/^\w/, (c) => c.toUpperCase())
-              )}
+              .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()))}
           </div>
         )
       },
@@ -45,9 +44,7 @@ export default function PlantsList() {
       renderCell: (params) => {
         return (
           <div className="productListItem">
-            {params.row.createdAt.slice(8, 10)} -
-            {params.row.createdAt.slice(5, 7)} -
-            {params.row.createdAt.slice(0, 4)}
+            {params.row.createdAt.slice(8, 10)} -{params.row.createdAt.slice(5, 7)} -{params.row.createdAt.slice(0, 4)}
           </div>
         )
       },
@@ -59,9 +56,7 @@ export default function PlantsList() {
       renderCell: (params) => {
         return (
           <div className="productListItem">
-            {params.row.discoveredAt.slice(8, 10)} -
-            {params.row.discoveredAt.slice(5, 7)} -
-            {params.row.discoveredAt.slice(0, 4)}
+            {params.row.discoveredAt.slice(8, 10)} -{params.row.discoveredAt.slice(5, 7)} -{params.row.discoveredAt.slice(0, 4)}
           </div>
         )
       },
@@ -76,11 +71,7 @@ export default function PlantsList() {
       headerName: 'Is it medicinal?',
       width: 125,
       renderCell: (params) => {
-        return (
-          <div className={`cellWithStatus ${params.row.medicinal}`}>
-            {params.row.medicinal}
-          </div>
-        )
+        return <div className={`cellWithStatus ${params.row.medicinal}`}>{params.row.medicinal}</div>
       },
     },
     {
@@ -88,11 +79,7 @@ export default function PlantsList() {
       headerName: 'Does it have a flower?',
       width: 175,
       renderCell: (params) => {
-        return (
-          <div className={`cellWithStatus ${params.row.flower}`}>
-            {params.row.flower}
-          </div>
-        )
+        return <div className={`cellWithStatus ${params.row.flower}`}>{params.row.flower}</div>
       },
     },
     {
@@ -107,9 +94,9 @@ export default function PlantsList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={'/plant/' + params.row._id}>
+            <LinkRouter to={'/plant/' + params.row._id}>
               <button className="productListEdit">Edit</button>
-            </Link>
+            </LinkRouter>
             <DeleteOutlinedIcon
               className="productListDelete"
               // onClick={() => handleDelete(params.row.id)}
@@ -129,11 +116,13 @@ export default function PlantsList() {
 
   return (
     <Container>
-      <Seo title="Plants" subtitle="Plant list from Warehouse Receipts" />
+      <Seo title="Plants list" subtitle="Plant list from Warehouse Receipts" />
 
-      {loading && 'Loading...'}
+      <Link to="/plants/new">Create new plant</Link>
 
       <div className="productList">
+        {loading && <Loading />}
+
         {error ? (
           'Hubo un error'
         ) : (
@@ -147,7 +136,7 @@ export default function PlantsList() {
             showColumnRightBorder={true}
             getRowId={(row) => row._id}
             loading={loading}
-            // rowsPerPageOptions={[10]}
+            rowsPerPageOptions={[10]}
           />
         )}
       </div>

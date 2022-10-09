@@ -1,246 +1,222 @@
-// import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined'
-// import SaveIcon from '@mui/icons-material/Save'
-// import { useEffect, useState } from 'react'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { useParams } from 'react-router-dom'
-// import Swal from 'sweetalert2'
+import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined'
+import SaveIcon from '@mui/icons-material/Save'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
-// import { useInputValue } from '../core/hooks/useInputValue'
-// import { useUser } from '../core/hooks/useUser'
-// import { resetCustomer } from '../core/redux/customerSlice'
-// import { createCustomerService, getCustomerService } from '../services/customer.service'
-// import { Link } from './Product.styles'
-// import { Container, customerInputs } from './CustomerAddOrEdit.styles'
-// import { DashboardSection, DashboradLayout } from './layout/Layout'
-// import { Seo } from './layout/Seo'
+import { useInputValue } from '../core/hooks/useInputValue'
+import { resetPlant } from '../core/redux/plantSlice'
+import { createPlantService, getPlantService } from '../services/plant.service'
+import { Link } from './Plant.styles'
+import { Container, plantInputs } from './PlantAddOrEdit.styles'
+import { Seo } from './layout/Seo'
 
-// export default function CustomerAddOrEdit({ title }) {
-//   const firstName = useInputValue('Pipito')
-//   const secondName = useInputValue(null)
-//   const firstSurname = useInputValue('Perez')
-//   const secondSurname = useInputValue(null)
-//   const gender = useInputValue('Male')
-//   const typeCitizenshipNumberId = useInputValue('Cédula de ciudadanía')
-//   const citizenshipNumberId = useInputValue('4567890123')
-//   const academicProgram = useInputValue(null)
-//   const studentCode = useInputValue(null)
-//   const semester = useInputValue(null)
-//   const email = useInputValue(null)
-//   const cellPhoneNumber = useInputValue(null)
-//   const address = useInputValue(null)
-//   const dateOfBirth = useInputValue('01-01-2018')
-//   const birthCountry = useInputValue('Colombia')
-//   const birthDepartment = useInputValue('Antioquia')
-//   const birthCity = useInputValue('Medellín')
-//   const [customerPhoto, setCustomerPhoto] = useState(null)
+export default function PlantAddOrEdit({ title }) {
+  // const name = useInputValue(null)
+  // const discoveredAt = useInputValue(null)
+  // const benefits = useInputValue(null)
+  // const medicinal = useInputValue(null)
+  // const flower = useInputValue(null)
+  // const maximumHeight = useInputValue(null)
+  // const model = useInputValue(null)
+  // const weight = useInputValue(null)
+  // const [plantPhoto, setPlantPhoto] = useState(null)
 
-//   const { customerId } = useParams()
-//   const dispatch = useDispatch()
-//   const { customer, loading, error } = useSelector((state) => state.customer)
-//   const { isAuth } = useUser()
+  const name = useInputValue('Ginkgo biloba')
+  // const discoveredAt = useInputValue('04/03/1988')
+  // const discoveredAt = useInputValue('2019-03-02T00:00:00.000Z')
+  const discoveredAt = useInputValue('2019-03-02')
+  const benefits = useInputValue('Mejora la concentración, dentro de la fitoterapia, el ginkgo o Ginkgo biloba, es una de las plantas curativas más conocidas. Se trata de una de las plantas medicinales más antiguas en Asia. Se cree que esta planta curativa es el árbol más antiguo que queda sobre la tierra. Sus hojas, en forma de abanico, son muy características. En cuanto a sus beneficios, esta planta cuenta propiedades antioxidantes que contribuyen a mejorar la concentración y la memoria. ')
+  const medicinal = useInputValue('Yes')
+  const flower = useInputValue('Yes')
+  const maximumHeight = useInputValue(30.9)
+  const model = useInputValue('Medicinal')
+  const weight = useInputValue(300.54)
+  const [plantPhoto, setPlantPhoto] = useState(null)
+  // const [plantPhoto, setPlantPhoto] = useState('https://via.placeholder.com/520x460')
 
-//   let nameRef
+  const navigate = useNavigate()
+  const { plantId } = useParams()
+  const dispatch = useDispatch()
+  const { plant, loading, error } = useSelector((state) => state.plant)
 
-//   function referenceComparator(reference) {
-//     switch (reference) {
-//       case 'firstName':
-//         nameRef = firstName
-//         nameRef.value = customer.firstName
-//         break
-//       case 'secondName':
-//         nameRef = secondName
-//         nameRef.value = customer.secondName
-//         break
-//       case 'firstSurname':
-//         nameRef = firstSurname
-//         nameRef.value = customer.firstSurname
-//         break
-//       case 'secondSurname':
-//         nameRef = secondSurname
-//         nameRef.value = customer.secondSurname
-//         break
-//       case 'gender':
-//         nameRef = gender
-//         nameRef.value = customer.gender
-//         break
-//       case 'typeCitizenshipNumberId':
-//         nameRef = typeCitizenshipNumberId
-//         nameRef.value = customer.typeCitizenship
-//         break
-//       case 'citizenshipNumberId':
-//         nameRef = citizenshipNumberId
-//         nameRef.value = customer.citizenshipNumb
-//         break
-//       case 'academicProgram':
-//         nameRef = academicProgram
-//         nameRef.value = customer.academicProgram
-//         break
-//       case 'studentCode':
-//         nameRef = studentCode
-//         nameRef.value = customer.studentCode
-//         break
-//       case 'semester':
-//         nameRef = semester
-//         nameRef.value = customer.semester
-//         break
-//       case 'email':
-//         nameRef = email
-//         nameRef.value = customer.email
-//         break
-//       case 'cellPhoneNumber':
-//         nameRef = cellPhoneNumber
-//         nameRef.value = customer.cellPhoneNumber
-//         break
-//       case 'address':
-//         nameRef = address
-//         nameRef.value = customer.address
-//         break
-//       case 'dateOfBirth':
-//         nameRef = dateOfBirth
-//         nameRef.value = customer.dateOfBirth
-//         break
-//       case 'birthCountry':
-//         nameRef = birthCountry
-//         nameRef.value = customer.birthCountry
-//         break
-//       case 'birthDepartment':
-//         nameRef = birthDepartment
-//         nameRef.value = customer.birthDepartment
-//         break
-//       case 'birthCity':
-//         nameRef = birthCity
-//         nameRef.value = customer.birthCity
-//         break
-//       default:
-//         nameRef = firstName
-//         nameRef.value = customer.firstName
-//         break
-//     }
-//   }
+  let nameRef
 
-//   function handleSubmit(e) {
-//     e.preventDefault()
+  function referenceComparator(reference) {
+    switch (reference) {
+      case 'name':
+        nameRef = name
+        nameRef.value = plant.name
+        break
+      case 'discoveredAt':
+        nameRef = discoveredAt
+        nameRef.value = plant.discoveredAt
+        // console.log('plant.discoveredAt', new Date(plant.discoveredAt))
+        // console.log('parseInt(plant.discoveredAt, 0)', parseInt(plant.discoveredAt, 0))
+        // console.log('parseInt(plant.discoveredAt)', parseInt(plant.discoveredAt))
+        break
+      case 'benefits':
+        nameRef = benefits
+        nameRef.value = plant.benefits
+        break
+      case 'medicinal':
+        nameRef = medicinal
+        nameRef.value = plant.medicinal
+        break
+      case 'flower':
+        nameRef = flower
+        nameRef.value = plant.flower
+        break
+      case 'maximumHeight':
+        nameRef = maximumHeight
+        nameRef.value = plant.maximumHeight
+        break
+      case 'model':
+        nameRef = model
+        nameRef.value = plant.model
+        break
+      case 'weight':
+        nameRef = weight
+        nameRef.value = plant.weight
+        break
+      case 'plantPhoto':
+        nameRef = plantPhoto
+        nameRef.value = plant.plantImage
+        break
+      default:
+        nameRef = name
+        nameRef.value = ''
+        break
+    }
+  }
 
-//     if (firstName != null && firstSurname != null && gender != null && typeCitizenshipNumberId != null && dateOfBirth != null && birthCountry != null && birthDepartment != null && birthCity != null) {
-//       if (customerPhoto != null) {
-//         if (!(customerPhoto.name.endsWith('.png') || customerPhoto.name.endsWith('.jpg') || customerPhoto.name.endsWith('.jpeg'))) {
-//           Swal.fire({
-//             title: '<strong>Error de archivo</strong>',
-//             icon: 'error',
-//             html: 'No se puede aceptar este tipo de archivo, elija una imágen del tipo indicado!',
-//             showCloseButton: true,
-//             showCancelButton: false,
-//             focusConfirm: false,
-//             confirmButtonText: 'Aceptar',
-//             confirmButtonAriaLabel: 'Aceptar'
-//           })
-//         }
-//       }
+  function handleSubmit(e) {
+    e.preventDefault()
 
-//       createCustomerService(dispatch, isAuth, {
-//         firstName: firstName.value,
-//         secondName: secondName.value,
-//         firstSurname: firstSurname.value,
-//         secondSurname: secondSurname.value,
-//         gender: gender.value,
-//         typeCitizenshipNumberId: typeCitizenshipNumberId.value,
-//         citizenshipNumberId: citizenshipNumberId.value,
-//         academicProgram: academicProgram.value,
-//         studentCode: studentCode.value,
-//         semester: semester.value,
-//         email: email.value,
-//         cellPhoneNumber: cellPhoneNumber.value,
-//         address: address.value,
-//         dateOfBirth: dateOfBirth.value,
-//         birthCountry: birthCountry.value,
-//         birthDepartment: birthDepartment.value,
-//         birthCity: birthCity.value,
-//         customerPhoto
-//       })
-//     } else {
-//       Swal.fire({
-//         title: '<strong>Faltan datos</strong>',
-//         icon: 'error',
-//         html: 'Verifique la infromación suministrada!',
-//         showCloseButton: true,
-//         showCancelButton: true,
-//         focusConfirm: false,
-//         confirmButtonText: 'Intentar de nuevo',
-//         confirmButtonAriaLabel: 'Intentar de nuevo',
-//         cancelButtonText: 'Cancelar',
-//         cancelButtonAriaLabel: 'Cancelar'
-//       })
-//     }
-//   }
+    if (name != null && discoveredAt != null && benefits != null && medicinal != null && flower != null && maximumHeight != null && model != null) {
+      if (plantPhoto != null) {
+        if (!(plantPhoto.name.endsWith('.png') || plantPhoto.name.endsWith('.jpg') || plantPhoto.name.endsWith('.jpeg'))) {
+          Swal.fire({
+            title: '<strong>Error de archivo</strong>',
+            icon: 'error',
+            html: 'This type of file cannot be accepted, choose an image of the indicated type!',
+            showCloseButton: true,
+            showCancelButton: false,
+            focusConfirm: false,
+            confirmButtonText: 'Accept',
+            confirmButtonAriaLabel: 'Accept',
+          })
+        }
+      }
 
-//   useEffect(() => {
-//     title === 'Crear nuevo beneficiario' && dispatch(resetCustomer())
-//     title === 'Editar beneficiario' && getCustomerService(dispatch, isAuth, customerId)
-//   }, [])
+      createPlantService(dispatch, {
+        name: name.value,
+        discoveredAt: discoveredAt.value,
+        benefits: benefits.value,
+        medicinal: medicinal.value,
+        flower: flower.value,
+        maximumHeight: maximumHeight.value,
+        model: model.value,
+        weight: weight.value,
+        plantPhoto,
+      })
+    } else {
+      Swal.fire({
+        title: '<strong>Faltan datos</strong>',
+        icon: 'error',
+        html: 'Check the information provided!',
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: 'Try again',
+        confirmButtonAriaLabel: 'Try again',
+        cancelButtonText: 'Cancel',
+        cancelButtonAriaLabel: 'Cancel',
+      })
+    }
+  }
 
-//   return (
-//     <DashboradLayout>
-//       <Seo
-//         title={
-//           title === 'Crear nuevo beneficiario'
-//             ? 'Nuevo beneficiario'
-//             : (customer.firstName + ' ' + customer.firstSurname)
-//                 .trim()
-//                 .toLowerCase()
-//                 .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()))
-//         }
-//         subtitle="Formulario de nuevo beneficiario"
-//       />
-//       <DashboardSection title={title === 'Crear nuevo beneficiario' ? title : title + ': ' + customerId}>
-//         <Container>
-//           <Link to="/beneficiarios" top="-45px" right="40px">
-//             Ir a beneficiarios
-//           </Link>
+  useEffect(() => {
+    title === 'Create new plant' && dispatch(resetPlant()) && plantId && navigate('/plant/' + plantId)
+    title === 'Edit plant' && getPlantService(dispatch, plantId)
+  }, [])
 
-//           <div className="newContainer scroll">
-//             <div className="bottom">
-//               <div className="left">
-//                 <img src={customerPhoto ? URL.createObjectURL(customerPhoto) : 'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'} alt="" />
-//               </div>
-//               <div className="right">
-//                 <form onSubmit={handleSubmit}>
-//                   <div className="formInput">
-//                     <label htmlFor="customerPhoto" className="button">
-//                       Click aquí para elegir la imágen: <DriveFolderUploadOutlinedIcon className="icon" />
-//                     </label>
-//                     <input type="file" id="customerPhoto" onChange={(e) => setCustomerPhoto(e.target.files[0])} style={{ display: 'none' }} />
-//                   </div>
+  return (
+    <Container>
+      <Seo
+        title={
+          title === 'Create new plant'
+            ? 'New plant'
+            : plant.name &&
+              'Editing ' +
+                plant.name
+                  .trim()
+                  .toLowerCase()
+                  .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase())) +
+                ' plant'
+        }
+        subtitle="New plant form"
+      />
 
-//                   {customerInputs.map((input, index) => {
-//                     if (title === 'Crear nuevo beneficiario') {
-//                       // input.value = ''
-//                     } else {
-//                       referenceComparator(input.nameRef)
-//                     }
+      {plantId && (
+        <Link to={'/plant/' + plantId} right="145px">
+          Go back to plant info
+        </Link>
+      )}
+      <Link to="/plants">Go to plants</Link>
 
-//                     return (
-//                       <div className="formInput" key={index}>
-//                         <label htmlFor={input.label.split(' ').join('')}>
-//                           {input.label}
-//                           {input.important && (
-//                             <span>
-//                               *<sup>obligatorio</sup>
-//                             </span>
-//                           )}
-//                         </label>
-//                         <input type={input.type} id={input.label.split(' ').join('')} placeholder={input.placeholder} {...nameRef} />
-//                       </div>
-//                     )
-//                   })}
-//                   <button>
-//                     Guardar beneficiario <SaveIcon className="icon" />
-//                   </button>
-//                 </form>
-//               </div>
-//             </div>
-//           </div>
-//         </Container>
-//       </DashboardSection>
-//     </DashboradLayout>
-//   )
-// }
+      <div className="newContainer scroll">
+        <div className="bottom">
+          <div className="left">
+            <img
+              src={
+                plantPhoto
+                  ? URL.createObjectURL(plantPhoto)
+                  : // plantPhoto
+                    'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
+              }
+              alt=""
+            />
+          </div>
+          <div className="right">
+            <form onSubmit={handleSubmit}>
+              <div className="formInput">
+                <label htmlFor="plantPhoto" className="button">
+                  Click here to choose the image: <DriveFolderUploadOutlinedIcon className="icon" />
+                </label>
+                <input type="file" id="plantPhoto" onChange={(e) => setPlantPhoto(e.target.files[0])} style={{ display: 'none' }} />
+              </div>
+
+              {plantInputs.map((input, index) => {
+                if (title === 'Create new plant') {
+                  // input.value = ''
+                } else {
+                  referenceComparator(input.nameRef)
+                }
+
+                return (
+                  <div className="formInput" key={index}>
+                    <label htmlFor={input.label.split(' ').join('')}>
+                      {input.label}
+                      {input.important && (
+                        <span>
+                          *<sup>Required</sup>
+                        </span>
+                      )}
+                    </label>
+                    {input.type != 'textArea' && <input type={input.type} id={input.label.split(' ').join('')} placeholder={input.placeholder} {...nameRef} />}
+                    {input.type == 'textArea' && <textarea type={input.type} id={input.label.split(' ').join('')} placeholder={input.placeholder} {...nameRef} />}
+                  </div>
+                )
+              })}
+              <button>
+                Save plant <SaveIcon className="icon" />
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </Container>
+  )
+}
