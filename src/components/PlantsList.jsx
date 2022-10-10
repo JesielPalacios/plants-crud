@@ -1,19 +1,65 @@
-import { DataGrid } from '@mui/x-data-grid'
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
-import { productRows } from '../dummyData'
-import { Link as LinkRouter} from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import { Seo } from './layout/Seo'
-import { getAllPlantsService } from '../services/plant.service'
+import { DataGrid } from '@mui/x-data-grid'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link as LinkRouter } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import { deletePlantService, getAllPlantsService } from '../services/plant.service'
+import { Seo } from './layout/Seo'
+import { Button, Link, Loading } from './Plant.styles'
 import { Container } from './PlantsList.styles'
-import { Link, Loading } from './Plant.styles'
 
 export default function PlantsList() {
-  // const [data, setData] = useState([])
-  // const handleDelete = (id) => {
-  //   setData(data.filter((item) => item.id !== id))
-  // }
+  const { plants, loading, error } = useSelector((state) => state.plant)
+
+  const dispatch = useDispatch()
+
+  const handleDelete = async (id) => {
+    await deletePlantService(dispatch, id)
+    getAllPlantsService(dispatch)
+
+    !error && Swal.fire('Plant deleted!', 'Plant deleted successfully!', 'success')
+  }
+
+  const handleUpdate = () => {
+    Swal.fire({
+      title: 'Update table?',
+      text: 'Are you sure you want to update the table',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#0f1141',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, update it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let timerInterval
+        Swal.fire({
+          title: 'Loading..!',
+          html: "Fetching your plants, don't worry.",
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading()
+            const b = Swal.getHtmlContainer().querySelector('b')
+            timerInterval = setInterval(() => {
+              b.textContent = Swal.getTimerLeft()
+            }, 100)
+          },
+          willClose: () => {
+            clearInterval(timerInterval)
+          },
+        }).then((result) => {
+          getAllPlantsService(dispatch)
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            // console.log('I was closed by the timer')
+          }
+        })
+
+        // !error && Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+      }
+    })
+  }
 
   const columns = [
     {
@@ -97,18 +143,12 @@ export default function PlantsList() {
             <LinkRouter to={'/plant/' + params.row._id}>
               <button className="productListEdit">Edit</button>
             </LinkRouter>
-            <DeleteOutlinedIcon
-              className="productListDelete"
-              // onClick={() => handleDelete(params.row.id)}
-            />
+            <DeleteOutlinedIcon className="productListDelete" onClick={() => handleDelete(params.row._id)} />
           </>
         )
       },
     },
   ]
-
-  const { plants, loading, error } = useSelector((state) => state.plant)
-  const dispatch = useDispatch()
 
   useEffect(() => {
     getAllPlantsService(dispatch)
@@ -120,25 +160,14 @@ export default function PlantsList() {
 
       <Link to="/plants/new">Create new plant</Link>
 
+      <Button right="185px" onClick={handleUpdate}>
+        Update list
+      </Button>
+
       <div className="productList">
         {loading && <Loading />}
 
-        {error ? (
-          'Hubo un error'
-        ) : (
-          <DataGrid
-            rows={plants}
-            disableSelectionOnClick
-            columns={columns}
-            pageSize={10}
-            checkboxSelection
-            rowHeight={70}
-            showColumnRightBorder={true}
-            getRowId={(row) => row._id}
-            loading={loading}
-            rowsPerPageOptions={[10]}
-          />
-        )}
+        {error ? 'Hubo un error' : <DataGrid rows={plants} disableSelectionOnClick columns={columns} pageSize={10} checkboxSelection rowHeight={70} showColumnRightBorder={true} getRowId={(row) => row._id} loading={loading} rowsPerPageOptions={[10]} />}
       </div>
     </Container>
   )

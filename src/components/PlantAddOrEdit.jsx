@@ -43,7 +43,7 @@ export default function PlantAddOrEdit({ title }) {
 
   let nameRef
 
-  function referenceComparator(reference) {
+  const referenceComparator = (reference) => {
     switch (reference) {
       case 'name':
         nameRef = name
@@ -91,9 +91,7 @@ export default function PlantAddOrEdit({ title }) {
     }
   }
 
-  function handleSubmit(e) {
-    e.preventDefault()
-
+  const validateAndSend = () => {
     if (name != null && discoveredAt != null && benefits != null && medicinal != null && flower != null && maximumHeight != null && model != null) {
       if (plantPhoto != null) {
         if (!(plantPhoto.name.endsWith('.png') || plantPhoto.name.endsWith('.jpg') || plantPhoto.name.endsWith('.jpeg'))) {
@@ -120,7 +118,7 @@ export default function PlantAddOrEdit({ title }) {
         model: model.value,
         weight: weight.value,
         plantPhoto,
-      })
+      }).then((id) => navigate('/plant/' + id))
     } else {
       Swal.fire({
         title: '<strong>Faltan datos</strong>',
@@ -135,6 +133,45 @@ export default function PlantAddOrEdit({ title }) {
         cancelButtonAriaLabel: 'Cancel',
       })
     }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    Swal.fire({
+      title: 'Do you want to save the changes?',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonColor: '#0f1141',
+      confirmButtonText: 'Save',
+      denyButtonText: `Don't save`,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let timerInterval
+        Swal.fire({
+          html: 'Saving..!',
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading()
+            const b = Swal.getHtmlContainer().querySelector('b')
+            timerInterval = setInterval(() => {
+              b.textContent = Swal.getTimerLeft()
+            }, 100)
+          },
+          willClose: () => {
+            clearInterval(timerInterval)
+          },
+        }).then(async (result) => {
+          await validateAndSend()
+          if (result.dismiss === Swal.DismissReason.timer) {
+            // console.log('I was closed by the timer')
+          }
+        })
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+      }
+    })
   }
 
   useEffect(() => {
