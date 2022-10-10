@@ -23,7 +23,7 @@ export default function PlantAddOrEdit({ title }) {
   // const weight = useInputValue(null)
   // const [plantPhoto, setPlantPhoto] = useState(null)
 
-  const name = useInputValue('Ginkgo biloba')
+  const name = useInputValue('Ginkgodsdcsdcsdc biloba')
   // const discoveredAt = useInputValue('04/03/1988')
   // const discoveredAt = useInputValue('2019-03-02T00:00:00.000Z')
   const discoveredAt = useInputValue('2019-03-02')
@@ -138,39 +138,51 @@ export default function PlantAddOrEdit({ title }) {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    Swal.fire({
-      title: 'Do you want to save the changes?',
-      showDenyButton: true,
-      showCancelButton: true,
-      confirmButtonColor: '#0f1141',
-      confirmButtonText: 'Save',
-      denyButtonText: `Don't save`,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let timerInterval
-        Swal.fire({
-          html: 'Saving..!',
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading()
-            const b = Swal.getHtmlContainer().querySelector('b')
-            timerInterval = setInterval(() => {
-              b.textContent = Swal.getTimerLeft()
-            }, 100)
-          },
-          willClose: () => {
-            clearInterval(timerInterval)
-          },
-        }).then(async (result) => {
-          await validateAndSend()
-          if (result.dismiss === Swal.DismissReason.timer) {
-            // console.log('I was closed by the timer')
-          }
-        })
-      } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info')
-      }
+    // Swal.fire({
+    //   title: 'Do you want to save the changes?',
+    //   showDenyButton: true,
+    //   showCancelButton: true,
+    //   confirmButtonColor: '#0f1141',
+    //   confirmButtonText: 'Save',
+    //   denyButtonText: `Don't save`,
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     let timerInterval
+    //     Swal.fire({
+    //       html: 'Saving..!',
+    //       timer: 2000,
+    //       timerProgressBar: true,
+    //       didOpen: () => {
+    //         Swal.showLoading()
+    //         const b = Swal.getHtmlContainer().querySelector('b')
+    //         timerInterval = setInterval(() => {
+    //           b.textContent = Swal.getTimerLeft()
+    //         }, 100)
+    //       },
+    //       willClose: () => {
+    //         clearInterval(timerInterval)
+    //       },
+    //     }).then(async (result) => {
+    //       await validateAndSend()
+    //       if (result.dismiss === Swal.DismissReason.timer) {
+    //         // console.log('I was closed by the timer')
+    //       }
+    //     })
+    //   } else if (result.isDenied) {
+    //     Swal.fire('Changes are not saved', '', 'info')
+    //   }
+    // })
+
+    createPlantService(dispatch, {
+      name: name.value,
+      discoveredAt: discoveredAt.value,
+      benefits: benefits.value,
+      medicinal: medicinal.value,
+      flower: flower.value,
+      maximumHeight: maximumHeight.value,
+      model: model.value,
+      weight: weight.value,
+      plantPhoto,
     })
   }
 
