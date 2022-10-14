@@ -22,7 +22,7 @@ export const Container = styled.div`
       /* margin: 0 20px 20px 20px; */
       /* margin: 10px 20px; */
       display: flex;
-      overflow: hidden;
+      /* overflow: hidden; */
 
       h1 {
         color: lightgray;

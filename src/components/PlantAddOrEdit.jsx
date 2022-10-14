@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import Select from 'react-select'
 
 import { resetPlant } from '../core/redux/plantSlice'
 import { createPlantService, getPlantService } from '../services/plant.service'
@@ -25,9 +26,7 @@ export default function PlantAddOrEdit({ title }) {
   const [discoveredAt, setDiscoveredAt] = useState('2019-03-02')
   // ('04/03/1988')
   // ('2019-03-02T00:00:00.000Z')
-  const [benefits, setBenefits] = useState(
-    'Mejora la concentración, dentro de la fitoterapia, el ginkgo o Ginkgo biloba, es una de las plantas curativas más conocidas. Se trata de una de las plantas medicinales más antiguas en Asia. Se cree que esta planta curativa es el árbol más antiguo que queda sobre la tierra. Sus hojas, en forma de abanico, son muy características. En cuanto a sus beneficios, esta planta cuenta propiedades antioxidantes que contribuyen a mejorar la concentración y la memoria. '
-  )
+  const [benefits, setBenefits] = useState('Mejora la concentración, dentro de la fitoterapia, el ginkgo o Ginkgo biloba, es una de las plantas curativas más conocidas. Se trata de una de las plantas medicinales más antiguas en Asia. Se cree que esta planta curativa es el árbol más antiguo que queda sobre la tierra. Sus hojas, en forma de abanico, son muy características. En cuanto a sus beneficios, esta planta cuenta propiedades antioxidantes que contribuyen a mejorar la concentración y la memoria. ')
   const [medicinal, setMedicinal] = useState('Yes')
   const [flower, setFlower] = useState('Yes')
   const [maximumHeight, setMaximumHeight] = useState(30.9)
@@ -141,6 +140,38 @@ export default function PlantAddOrEdit({ title }) {
     title === 'Edit plant' && getPlantService(dispatch, plantId)
   }, [])
 
+  const options = [
+    { value: 'yes', label: 'Yes' },
+    { value: 'no', label: 'No' }
+  ]
+  const modelCategoryOptions = [
+    { value: 'Medicinal', label: 'Medicinal' },
+    { value: 'Edible (even raw)', label: 'Edible (even raw)' },
+    { value: 'Requires preparation to be edible', label: 'Requires preparation to be edible' },
+    { value: 'Poisonous', label: 'Poisonous' },
+    { value: 'Non eatable', label: 'Non eatable' },
+    { value: 'Ornament', label: 'Ornament' }
+  ]
+
+  const customStyles = {
+    control: () => ({
+      // none of react-select's styles are passed to <Control />
+      display: 'flex',
+      width: '100%',
+      padding: '5px',
+      border: 'none',
+      borderBottom: '1px solid gray',
+      fontSize: '14px',
+      cursor: 'pointer'
+    }),
+    singleValue: (provided, state) => {
+      const opacity = state.isDisabled ? 0.5 : 1
+      const transition = 'opacity 300ms'
+
+      return { ...provided, opacity, transition }
+    }
+  }
+
   return (
     <Container>
       <Seo
@@ -214,7 +245,47 @@ export default function PlantAddOrEdit({ title }) {
                     *<sup>Required</sup>
                   </span>
                 </label>
-                <textarea id="benefits" placeholder="Benefits plan description goes here" />
+                <textarea id="benefits" placeholder="Benefits plant description goes here" />
+              </div>
+
+              <div className="formInput">
+                <label htmlFor="medicinal">
+                  Is the plant medicinal?
+                  <span>
+                    *<sup>Required</sup>
+                  </span>
+                </label>
+                <Select id="medicinal" options={options} placeholder={'Click here to select'} isClearable={true} hideSelectedOptions={true} isSearchable={false} styles={customStyles} />
+              </div>
+
+              <div className="formInput">
+                <label htmlFor="flower">
+                  Does the plant have a flower?
+                  <span>
+                    *<sup>Required</sup>
+                  </span>
+                </label>
+                <Select id="flower" options={options} placeholder={'Click here to select'} isClearable={true} hideSelectedOptions={true} isSearchable={false} styles={customStyles} />
+              </div>
+
+              <div className="formInput">
+                <label htmlFor="maximumHeight">
+                  Maximum plant height
+                  <span>
+                    *<sup>Required</sup>
+                  </span>
+                </label>
+                <input type="number" id="maximumHeight" placeholder="Maximum plant height goes here" />
+              </div>
+
+              <div className="formInput">
+                <label htmlFor="flower">
+                  Model (category)
+                  <span>
+                    *<sup>Required</sup>
+                  </span>
+                </label>
+                <Select id="flower" options={modelCategoryOptions} placeholder={'Click here to select'} isClearable={true} hideSelectedOptions={true} isSearchable={false} styles={customStyles} />
               </div>
 
               <button>
