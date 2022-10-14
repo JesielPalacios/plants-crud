@@ -140,7 +140,7 @@ export default function PlantAddOrEdit({ title }) {
     title === 'Edit plant' && getPlantService(dispatch, plantId)
   }, [])
 
-  const options = [
+  const yesOrNoOptions = [
     { value: 'yes', label: 'Yes' },
     { value: 'no', label: 'No' }
   ]
@@ -218,75 +218,37 @@ export default function PlantAddOrEdit({ title }) {
                 <input type="file" id="plantPhoto" onChange={(e) => setPlantPhoto(e.target.files[0])} style={{ display: 'none' }} />
               </div>
 
-              <div className="formInput">
-                <label htmlFor="name">
-                  Name
-                  <span>
-                    *<sup>Required</sup>
-                  </span>
-                </label>
-                <input type="text" id="name" placeholder="Plant name goes here" />
-              </div>
+              <Item id="name" title="Name" important={true}>
+                <input type="text" id="name" placeholder="Plant name goes here" onChange={(e) => setName(e.target.value)} />
+              </Item>
 
-              <div className="formInput">
-                <label htmlFor="discoveredAt">
-                  Discovery date
-                  <span>
-                    *<sup>Required</sup>
-                  </span>
-                </label>
-                <input type="date" id="discoveredAt" placeholder="Plant discovery date goes here" />
-              </div>
+              <Item id="discoveredAt" title="Discovery date" important={true}>
+                <input type="date" id="discoveredAt" placeholder="Plant discovery date goes here" onChange={(e) => setDiscoveredAt(e.target.value)} />
+              </Item>
 
-              <div className="formInput">
-                <label htmlFor="benefits">
-                  Benefits
-                  <span>
-                    *<sup>Required</sup>
-                  </span>
-                </label>
-                <textarea id="benefits" placeholder="Benefits plant description goes here" />
-              </div>
+              <Item id="benefits" title="Benefits" important={true}>
+                <textarea id="benefits" placeholder="Benefits plant description goes here" onChange={(e) => setBenefits(e.target.value)} />
+              </Item>
 
-              <div className="formInput">
-                <label htmlFor="medicinal">
-                  Is the plant medicinal?
-                  <span>
-                    *<sup>Required</sup>
-                  </span>
-                </label>
-                <Select id="medicinal" options={options} placeholder={'Click here to select'} isClearable={true} hideSelectedOptions={true} isSearchable={false} styles={customStyles} />
-              </div>
+              <Item id="medicinal" title="Is the plant medicinal?" important={true}>
+                <Select id="medicinal" options={yesOrNoOptions} placeholder={'Click here to select'} isClearable={true} hideSelectedOptions={true} isSearchable={false} styles={customStyles} onChange={(e) => setMedicinal(e.target.value)} />
+              </Item>
 
-              <div className="formInput">
-                <label htmlFor="flower">
-                  Does the plant have a flower?
-                  <span>
-                    *<sup>Required</sup>
-                  </span>
-                </label>
-                <Select id="flower" options={options} placeholder={'Click here to select'} isClearable={true} hideSelectedOptions={true} isSearchable={false} styles={customStyles} />
-              </div>
+              <Item id="flower" title="Does the plant have a flower?" important={true}>
+                <Select id="flower" options={yesOrNoOptions} placeholder={'Click here to select'} isClearable={true} hideSelectedOptions={true} isSearchable={false} styles={customStyles} onChange={(e) => setFlower(e.target.value)} />
+              </Item>
 
-              <div className="formInput">
-                <label htmlFor="maximumHeight">
-                  Maximum plant height
-                  <span>
-                    *<sup>Required</sup>
-                  </span>
-                </label>
-                <input type="number" id="maximumHeight" placeholder="Maximum plant height goes here" />
-              </div>
+              <Item id="maximumHeight" title="Maximum plant height" important={true}>
+                <input type="number" id="maximumHeight" placeholder="Maximum plant height goes here" onChange={(e) => setMaximumHeight(e.target.value)} />
+              </Item>
 
-              <div className="formInput">
-                <label htmlFor="flower">
-                  Model (category)
-                  <span>
-                    *<sup>Required</sup>
-                  </span>
-                </label>
-                <Select id="flower" options={modelCategoryOptions} placeholder={'Click here to select'} isClearable={true} hideSelectedOptions={true} isSearchable={false} styles={customStyles} />
-              </div>
+              <Item id="model" title="Model (category)" important={true}>
+                <Select id="model" options={modelCategoryOptions} placeholder={'Click here to select'} isClearable={true} hideSelectedOptions={true} isSearchable={false} styles={customStyles} onChange={(e) => setModel(e.target.value)} />
+              </Item>
+
+              <Item id="weight" title="Weight">
+                <input type="number" id="weight" placeholder="Plant weight height goes here" onChange={(e) => setWeight(e.target.value)} />
+              </Item>
 
               <button>
                 Save plant <SaveIcon className="icon" />
@@ -296,5 +258,22 @@ export default function PlantAddOrEdit({ title }) {
         </div>
       </div>
     </Container>
+  )
+}
+
+function Item({ children, id, title, important }) {
+  return (
+    <div className="formInput">
+      <label htmlFor={id}>
+        {title}
+        {important && (
+          <span>
+            *<sup>Required</sup>
+          </span>
+        )}
+      </label>
+
+      {children}
+    </div>
   )
 }
