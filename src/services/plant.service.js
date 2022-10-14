@@ -43,7 +43,7 @@ export async function createPlantService(dispatch, PlantData) {
   await formData.append('weight', PlantData.weight)
   
   try {
-    const res = await axios.post('http://localhost:3001/api/Plants', formData, {
+    const res = await axios.post('http://localhost:3001/api/plants', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

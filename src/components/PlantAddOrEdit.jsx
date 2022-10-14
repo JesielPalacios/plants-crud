@@ -27,7 +27,9 @@ export default function PlantAddOrEdit({ title }) {
   // const discoveredAt = useInputValue('04/03/1988')
   // const discoveredAt = useInputValue('2019-03-02T00:00:00.000Z')
   const discoveredAt = useInputValue('2019-03-02')
-  const benefits = useInputValue('Mejora la concentración, dentro de la fitoterapia, el ginkgo o Ginkgo biloba, es una de las plantas curativas más conocidas. Se trata de una de las plantas medicinales más antiguas en Asia. Se cree que esta planta curativa es el árbol más antiguo que queda sobre la tierra. Sus hojas, en forma de abanico, son muy características. En cuanto a sus beneficios, esta planta cuenta propiedades antioxidantes que contribuyen a mejorar la concentración y la memoria. ')
+  const benefits = useInputValue(
+    'Mejora la concentración, dentro de la fitoterapia, el ginkgo o Ginkgo biloba, es una de las plantas curativas más conocidas. Se trata de una de las plantas medicinales más antiguas en Asia. Se cree que esta planta curativa es el árbol más antiguo que queda sobre la tierra. Sus hojas, en forma de abanico, son muy características. En cuanto a sus beneficios, esta planta cuenta propiedades antioxidantes que contribuyen a mejorar la concentración y la memoria. '
+  )
   const medicinal = useInputValue('Yes')
   const flower = useInputValue('Yes')
   const maximumHeight = useInputValue(30.9)
@@ -92,9 +94,23 @@ export default function PlantAddOrEdit({ title }) {
   }
 
   const validateAndSend = () => {
-    if (name != null && discoveredAt != null && benefits != null && medicinal != null && flower != null && maximumHeight != null && model != null) {
+    if (
+      name != null &&
+      discoveredAt != null &&
+      benefits != null &&
+      medicinal != null &&
+      flower != null &&
+      maximumHeight != null &&
+      model != null
+    ) {
       if (plantPhoto != null) {
-        if (!(plantPhoto.name.endsWith('.png') || plantPhoto.name.endsWith('.jpg') || plantPhoto.name.endsWith('.jpeg'))) {
+        if (
+          !(
+            plantPhoto.name.endsWith('.png') ||
+            plantPhoto.name.endsWith('.jpg') ||
+            plantPhoto.name.endsWith('.jpeg')
+          )
+        ) {
           Swal.fire({
             title: '<strong>Error de archivo</strong>',
             icon: 'error',
@@ -187,7 +203,10 @@ export default function PlantAddOrEdit({ title }) {
   }
 
   useEffect(() => {
-    title === 'Create new plant' && dispatch(resetPlant()) && plantId && navigate('/plant/' + plantId)
+    title === 'Create new plant' &&
+      dispatch(resetPlant()) &&
+      plantId &&
+      navigate('/plant/' + plantId)
     title === 'Edit plant' && getPlantService(dispatch, plantId)
   }, [])
 
@@ -202,7 +221,9 @@ export default function PlantAddOrEdit({ title }) {
                 plant.name
                   .trim()
                   .toLowerCase()
-                  .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase())) +
+                  .replace(/\w\S*/g, (w) =>
+                    w.replace(/^\w/, (c) => c.toUpperCase())
+                  ) +
                 ' plant'
         }
         subtitle="New plant form"
@@ -232,9 +253,15 @@ export default function PlantAddOrEdit({ title }) {
             <form onSubmit={handleSubmit}>
               <div className="formInput">
                 <label htmlFor="plantPhoto" className="button">
-                  Click here to choose the image: <DriveFolderUploadOutlinedIcon className="icon" />
+                  Click here to choose the image:{' '}
+                  <DriveFolderUploadOutlinedIcon className="icon" />
                 </label>
-                <input type="file" id="plantPhoto" onChange={(e) => setPlantPhoto(e.target.files[0])} style={{ display: 'none' }} />
+                <input
+                  type="file"
+                  id="plantPhoto"
+                  onChange={(e) => setPlantPhoto(e.target.files[0])}
+                  style={{ display: 'none' }}
+                />
               </div>
 
               {plantInputs.map((input, index) => {
@@ -254,8 +281,22 @@ export default function PlantAddOrEdit({ title }) {
                         </span>
                       )}
                     </label>
-                    {input.type != 'textArea' && <input type={input.type} id={input.label.split(' ').join('')} placeholder={input.placeholder} {...nameRef} />}
-                    {input.type == 'textArea' && <textarea type={input.type} id={input.label.split(' ').join('')} placeholder={input.placeholder} {...nameRef} />}
+                    {input.type != 'textArea' && (
+                      <input
+                        type={input.type}
+                        id={input.label.split(' ').join('')}
+                        placeholder={input.placeholder}
+                        // {...nameRef}
+                      />
+                    )}
+                    {input.type == 'textArea' && (
+                      <textarea
+                        type={input.type}
+                        id={input.label.split(' ').join('')}
+                        placeholder={input.placeholder}
+                        // {...nameRef}
+                      />
+                    )}
                   </div>
                 )
               })}

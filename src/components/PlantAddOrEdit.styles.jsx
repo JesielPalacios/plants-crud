@@ -85,12 +85,18 @@ export const Container = styled.div`
             }
 
             textarea {
-              max-height: 75px;
-              max-width: 350px;
-              min-height: 55px;
-              min-width: 350px;
-              width: 322px;
-              height: 189px;
+              /* max-height: 75px; */
+              /* max-width: 350px; */
+              /* min-height: 55px; */
+              /* min-width: 350px; */
+              /* width: 322px; */
+              /* height: 189px; */
+
+              max-width: 100%;
+              min-width: 100%;
+              max-height: 200px;
+              max-height: 80px;
+              min-height: 60%;
             }
           }
 
@@ -191,7 +197,7 @@ export const plantInputs = [
   {
     nameRef: 'maximumHeight',
     label: 'Maximum plant height.',
-    type: 'text',
+    type: 'number',
     placeholder: 'Write here the max height.',
     important: true,
   },
@@ -205,7 +211,7 @@ export const plantInputs = [
   {
     nameRef: 'weight',
     label: 'Weight',
-    type: 'text',
+    type: 'number',
     placeholder: 'Write here the weight.',
   },
 ]

@@ -1,0 +1,11 @@
+{
+  "folders": [
+	{
+		"path": "."
+	},
+	{
+		"path": "../products_backend"
+	}
+],
+  "settings": {}
+}
