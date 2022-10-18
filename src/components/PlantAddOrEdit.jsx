@@ -143,14 +143,6 @@ export default function PlantAddOrEdit({ title }) {
     })
   }
 
-  useEffect(() => {
-    title === 'Create new plant' &&
-      dispatch(resetPlant()) &&
-      plantId &&
-      navigate('/plant/' + plantId)
-    title === 'Edit plant' && getPlantService(dispatch, plantId)
-  }, [])
-
   const yesOrNoOptions = [
     { value: 'yes', label: 'Yes' },
     { value: 'no', label: 'No' }
@@ -205,6 +197,16 @@ export default function PlantAddOrEdit({ title }) {
       return splitDate[0] + '-' + splitDate[1] + '-' + splitDate[2].slice(0, 2)
     }
   }
+
+  useEffect(() => {
+    title === 'Create new plant' &&
+      dispatch(resetPlant()) &&
+      plantId &&
+      navigate('/plant/' + plantId)
+    title === 'Edit plant' && getPlantService(dispatch, plantId)
+    console.log(title)
+    console.log(plant)
+  }, [])
 
   return (
     <Container>
@@ -360,7 +362,7 @@ export default function PlantAddOrEdit({ title }) {
               </FormItem>
 
               <FormItem id="model" title="Model (category)" important={true}>
-                {plant.model ? (
+                {plant.model && (
                   <Select
                     id="model"
                     options={modelCategoryOptions}
@@ -374,17 +376,6 @@ export default function PlantAddOrEdit({ title }) {
                       value: plant.model,
                       label: plant.model
                     }}
-                  />
-                ) : (
-                  <Select
-                    id="model"
-                    options={modelCategoryOptions}
-                    placeholder={'Click here to select'}
-                    isClearable={true}
-                    hideSelectedOptions={true}
-                    isSearchable={false}
-                    styles={customStyles}
-                    onChange={setModel}
                   />
                 )}
               </FormItem>
