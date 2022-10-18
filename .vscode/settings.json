@@ -19,5 +19,9 @@
     "statusBarItem.remoteBackground": "#68217a",
     "statusBarItem.remoteForeground": "#e7e7e7"
   },
-  "peacock.color": "#68217A"
+  "peacock.color": "#68217A",
+  "files.exclude": {
+    "**/node_modules": true,
+    ".vscode": true
+  }
 }

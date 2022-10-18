@@ -97,6 +97,8 @@ export const Container = styled.div`
               max-height: 200px;
               max-height: 80px;
               min-height: 60%;
+
+              height: 42px;
             }
           }
 
@@ -163,7 +165,7 @@ export const plantInputs = [
     label: 'Name',
     type: 'text',
     placeholder: 'Write here the the plant name.',
-    important: true,
+    important: true
   },
   {
     nameRef: 'discoveredAt',
@@ -171,47 +173,47 @@ export const plantInputs = [
     label: 'Discovery date',
     type: 'date',
     placeholder: 'Write here the discovery date.',
-    important: true,
+    important: true
   },
   {
     nameRef: 'benefits',
     label: 'Benefits',
     type: 'textArea',
     placeholder: 'Write here the plant benefits.',
-    important: true,
+    important: true
   },
   {
     nameRef: 'medicinal',
     label: 'Is the plant medicinal?',
     type: 'text',
     placeholder: 'Click here to select.',
-    important: true,
+    important: true
   },
   {
     nameRef: 'flower',
     label: 'Does the plant have a flower?',
     type: 'text',
     placeholder: 'Click here to select.',
-    important: true,
+    important: true
   },
   {
     nameRef: 'maximumHeight',
     label: 'Maximum plant height.',
     type: 'number',
     placeholder: 'Write here the max height.',
-    important: true,
+    important: true
   },
   {
     nameRef: 'model',
     label: 'Model (category)',
     type: 'text',
     placeholder: 'Write here the model.',
-    important: true,
+    important: true
   },
   {
     nameRef: 'weight',
     label: 'Weight',
     type: 'number',
-    placeholder: 'Write here the weight.',
-  },
+    placeholder: 'Write here the weight.'
+  }
 ]

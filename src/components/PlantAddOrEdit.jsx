@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import Select from 'react-select'
+import { useForm } from 'react-hook-form'
 
 import { resetPlant } from '../core/redux/plantSlice'
 import { createPlantService, getPlantService } from '../services/plant.service'
@@ -26,7 +27,9 @@ export default function PlantAddOrEdit({ title }) {
   const [discoveredAt, setDiscoveredAt] = useState('2019-03-02')
   // ('04/03/1988')
   // ('2019-03-02T00:00:00.000Z')
-  const [benefits, setBenefits] = useState('Mejora la concentración, dentro de la fitoterapia, el ginkgo o Ginkgo biloba, es una de las plantas curativas más conocidas. Se trata de una de las plantas medicinales más antiguas en Asia. Se cree que esta planta curativa es el árbol más antiguo que queda sobre la tierra. Sus hojas, en forma de abanico, son muy características. En cuanto a sus beneficios, esta planta cuenta propiedades antioxidantes que contribuyen a mejorar la concentración y la memoria. ')
+  const [benefits, setBenefits] = useState(
+    'Mejora la concentración, dentro de la fitoterapia, el ginkgo o Ginkgo biloba, es una de las plantas curativas más conocidas. Se trata de una de las plantas medicinales más antiguas en Asia. Se cree que esta planta curativa es el árbol más antiguo que queda sobre la tierra. Sus hojas, en forma de abanico, son muy características. En cuanto a sus beneficios, esta planta cuenta propiedades antioxidantes que contribuyen a mejorar la concentración y la memoria. '
+  )
   const [medicinal, setMedicinal] = useState('Yes')
   const [flower, setFlower] = useState('Yes')
   const [maximumHeight, setMaximumHeight] = useState(30.9)
@@ -39,6 +42,11 @@ export default function PlantAddOrEdit({ title }) {
   const { plantId } = useParams()
   const dispatch = useDispatch()
   const { plant, loading, error } = useSelector((state) => state.plant)
+
+  // console.log(
+  //   'useSelector((state) => state)',
+  //   useSelector((state) => state)
+  // )
 
   // const validateAndSend = () => {
   //   if (name != null && discoveredAt != null && benefits != null && medicinal != null && flower != null && maximumHeight != null && model != null) {
@@ -136,7 +144,10 @@ export default function PlantAddOrEdit({ title }) {
   }
 
   useEffect(() => {
-    title === 'Create new plant' && dispatch(resetPlant()) && plantId && navigate('/plant/' + plantId)
+    title === 'Create new plant' &&
+      dispatch(resetPlant()) &&
+      plantId &&
+      navigate('/plant/' + plantId)
     title === 'Edit plant' && getPlantService(dispatch, plantId)
   }, [])
 
@@ -147,7 +158,10 @@ export default function PlantAddOrEdit({ title }) {
   const modelCategoryOptions = [
     { value: 'Medicinal', label: 'Medicinal' },
     { value: 'Edible (even raw)', label: 'Edible (even raw)' },
-    { value: 'Requires preparation to be edible', label: 'Requires preparation to be edible' },
+    {
+      value: 'Requires preparation to be edible',
+      label: 'Requires preparation to be edible'
+    },
     { value: 'Poisonous', label: 'Poisonous' },
     { value: 'Non eatable', label: 'Non eatable' },
     { value: 'Ornament', label: 'Ornament' }
@@ -158,7 +172,6 @@ export default function PlantAddOrEdit({ title }) {
       // none of react-select's styles are passed to <Control />
       display: 'flex',
       width: '100%',
-      padding: '5px',
       border: 'none',
       borderBottom: '1px solid gray',
       fontSize: '14px',
@@ -167,8 +180,29 @@ export default function PlantAddOrEdit({ title }) {
     singleValue: (provided, state) => {
       const opacity = state.isDisabled ? 0.5 : 1
       const transition = 'opacity 300ms'
+      const cursor = 'pointer'
 
-      return { ...provided, opacity, transition }
+      return { ...provided, opacity, transition, cursor }
+    }
+  }
+
+  function convertToTimestamp(date) {
+    if (date) {
+      let splitDate = date.split('-')
+      let newDate = new Date(
+        splitDate[0],
+        splitDate[1] - 1,
+        splitDate[2].slice(0, 2)
+      )
+      console.log(newDate.getTime())
+      return newDate
+    }
+  }
+
+  function fortmatDate(date) {
+    if (date) {
+      let splitDate = date.split('-')
+      return splitDate[0] + '-' + splitDate[1] + '-' + splitDate[2].slice(0, 2)
     }
   }
 
@@ -183,7 +217,9 @@ export default function PlantAddOrEdit({ title }) {
                 plant.name
                   .trim()
                   .toLowerCase()
-                  .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase())) +
+                  .replace(/\w\S*/g, (w) =>
+                    w.replace(/^\w/, (c) => c.toUpperCase())
+                  ) +
                 ' plant'
         }
         subtitle="New plant form"
@@ -213,42 +249,155 @@ export default function PlantAddOrEdit({ title }) {
             <form onSubmit={handleSubmit}>
               <div className="formInput">
                 <label htmlFor="plantPhoto" className="button">
-                  Click here to choose the image: <DriveFolderUploadOutlinedIcon className="icon" />
+                  Click here to choose the image:{' '}
+                  <DriveFolderUploadOutlinedIcon className="icon" />
                 </label>
-                <input type="file" id="plantPhoto" onChange={(e) => setPlantPhoto(e.target.files[0])} style={{ display: 'none' }} />
+                <input
+                  type="file"
+                  id="plantPhoto"
+                  style={{ display: 'none' }}
+                  onChange={(e) => setPlantPhoto(e.target.files[0])}
+                />
               </div>
 
-              <Item id="name" title="Name" important={true}>
-                <input type="text" id="name" placeholder="Plant name goes here" onChange={(e) => setName(e.target.value)} />
-              </Item>
+              <FormItem id="name" title="Name" important={true}>
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="Plant name goes here"
+                  onChange={(e) => setName(e.target.value)}
+                  defaultValue={title === 'Edit plant' ? plant.name : ''}
+                />
+              </FormItem>
 
-              <Item id="discoveredAt" title="Discovery date" important={true}>
-                <input type="date" id="discoveredAt" placeholder="Plant discovery date goes here" onChange={(e) => setDiscoveredAt(e.target.value)} />
-              </Item>
+              <FormItem
+                id="discoveredAt"
+                title="Discovery date"
+                important={true}
+              >
+                <input
+                  type="date"
+                  id="discoveredAt"
+                  placeholder="Plant discovery date goes here"
+                  onChange={(e) => setDiscoveredAt(e.target.value)}
+                  defaultValue={
+                    title === 'Edit plant'
+                      ? fortmatDate(plant.discoveredAt)
+                      : ''
+                  }
+                />
+              </FormItem>
 
-              <Item id="benefits" title="Benefits" important={true}>
-                <textarea id="benefits" placeholder="Benefits plant description goes here" onChange={(e) => setBenefits(e.target.value)} />
-              </Item>
+              <FormItem id="benefits" title="Benefits" important={true}>
+                <textarea
+                  id="benefits"
+                  placeholder="Benefits plant description goes here"
+                  onChange={(e) => setBenefits(e.target.value)}
+                  defaultValue={title === 'Edit plant' ? plant.benefits : ''}
+                />
+              </FormItem>
 
-              <Item id="medicinal" title="Is the plant medicinal?" important={true}>
-                <Select id="medicinal" options={yesOrNoOptions} placeholder={'Click here to select'} isClearable={true} hideSelectedOptions={true} isSearchable={false} styles={customStyles} onChange={(e) => setMedicinal(e.target.value)} />
-              </Item>
+              <FormItem
+                id="medicinal"
+                title="Is the plant medicinal?"
+                important={true}
+              >
+                {plant.medicinal && (
+                  <Select
+                    id="flower"
+                    options={yesOrNoOptions}
+                    placeholder={'Click here to select'}
+                    isClearable={true}
+                    hideSelectedOptions={true}
+                    isSearchable={false}
+                    styles={customStyles}
+                    onChange={setFlower}
+                    defaultValue={{
+                      value: plant.medicinal,
+                      label: plant.medicinal
+                    }}
+                  />
+                )}
+              </FormItem>
 
-              <Item id="flower" title="Does the plant have a flower?" important={true}>
-                <Select id="flower" options={yesOrNoOptions} placeholder={'Click here to select'} isClearable={true} hideSelectedOptions={true} isSearchable={false} styles={customStyles} onChange={(e) => setFlower(e.target.value)} />
-              </Item>
+              <FormItem
+                id="flower"
+                title="Does the plant have a flower?"
+                important={true}
+              >
+                {plant.flower && (
+                  <Select
+                    id="flower"
+                    options={yesOrNoOptions}
+                    placeholder={'Click here to select'}
+                    isClearable={true}
+                    hideSelectedOptions={true}
+                    isSearchable={false}
+                    styles={customStyles}
+                    onChange={setFlower}
+                    defaultValue={{
+                      value: plant.flower,
+                      label: plant.flower
+                    }}
+                  />
+                )}
+              </FormItem>
 
-              <Item id="maximumHeight" title="Maximum plant height" important={true}>
-                <input type="number" id="maximumHeight" placeholder="Maximum plant height goes here" onChange={(e) => setMaximumHeight(e.target.value)} />
-              </Item>
+              <FormItem
+                id="maximumHeight"
+                title="Maximum height"
+                important={true}
+              >
+                <input
+                  type="number"
+                  id="maximumHeight"
+                  placeholder="Maximum plant height goes here"
+                  onChange={(e) => setMaximumHeight(e.target.value)}
+                  defaultValue={
+                    title === 'Edit plant' ? plant.maximumHeight : ''
+                  }
+                />
+              </FormItem>
 
-              <Item id="model" title="Model (category)" important={true}>
-                <Select id="model" options={modelCategoryOptions} placeholder={'Click here to select'} isClearable={true} hideSelectedOptions={true} isSearchable={false} styles={customStyles} onChange={(e) => setModel(e.target.value)} />
-              </Item>
+              <FormItem id="model" title="Model (category)" important={true}>
+                {plant.model ? (
+                  <Select
+                    id="model"
+                    options={modelCategoryOptions}
+                    placeholder={'Click here to select'}
+                    isClearable={true}
+                    hideSelectedOptions={true}
+                    isSearchable={false}
+                    styles={customStyles}
+                    onChange={setModel}
+                    defaultValue={{
+                      value: plant.model,
+                      label: plant.model
+                    }}
+                  />
+                ) : (
+                  <Select
+                    id="model"
+                    options={modelCategoryOptions}
+                    placeholder={'Click here to select'}
+                    isClearable={true}
+                    hideSelectedOptions={true}
+                    isSearchable={false}
+                    styles={customStyles}
+                    onChange={setModel}
+                  />
+                )}
+              </FormItem>
 
-              <Item id="weight" title="Weight">
-                <input type="number" id="weight" placeholder="Plant weight height goes here" onChange={(e) => setWeight(e.target.value)} />
-              </Item>
+              <FormItem id="weight" title="Weight">
+                <input
+                  type="number"
+                  id="weight"
+                  placeholder="Plant weight height goes here"
+                  onChange={(e) => setWeight(e.target.value)}
+                  defaultValue={title === 'Edit plant' ? plant.weight : ''}
+                />
+              </FormItem>
 
               <button>
                 Save plant <SaveIcon className="icon" />
@@ -261,11 +410,12 @@ export default function PlantAddOrEdit({ title }) {
   )
 }
 
-function Item({ children, id, title, important }) {
+function FormItem({ children, id, title, important }) {
   return (
     <div className="formInput">
       <label htmlFor={id}>
         {title}
+
         {important && (
           <span>
             *<sup>Required</sup>
