@@ -12,18 +12,34 @@ import { Seo } from './layout/Seo'
 import { Button, Link, Loading } from './Plant.styles'
 import { Container } from './PlantsList.styles'
 
+export function handleDelete(id, loading, error, dispatch) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      await deletePlantService(dispatch, id)
+      getAllPlantsService(dispatch)
+
+      !(loading && error) &&
+        Swal.fire(
+          'Plant deleted!',
+          'Plant has been deleted successfully!',
+          'success'
+        )
+    }
+  })
+}
+
 export default function PlantsList() {
   const { plants, loading, error } = useSelector((state) => state.plant)
 
   const dispatch = useDispatch()
-
-  const handleDelete = async (id) => {
-    await deletePlantService(dispatch, id)
-    getAllPlantsService(dispatch)
-
-    !error &&
-      Swal.fire('Plant deleted!', 'Plant deleted successfully!', 'success')
-  }
 
   const handleUpdate = () => {
     Swal.fire({
@@ -163,7 +179,9 @@ export default function PlantsList() {
             </LinkRouter>
             <DeleteOutlinedIcon
               className="productListDelete"
-              onClick={() => handleDelete(params.row._id)}
+              onClick={() =>
+                handleDelete(params.row._id, loading, error, dispatch)
+              }
             />
           </>
         )

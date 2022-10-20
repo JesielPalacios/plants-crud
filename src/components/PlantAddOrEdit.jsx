@@ -1,6 +1,6 @@
 import DriveFolderUploadOutlinedIcon from '@mui/icons-material/DriveFolderUploadOutlined'
 import SaveIcon from '@mui/icons-material/Save'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -133,8 +133,9 @@ export default function PlantAddOrEdit({ title }) {
           willClose: () => {
             clearInterval(timerInterval)
           }
-        }).then(async (result) => {
-          await validateAndSend()
+        }).then((result) => {
+          validateAndSend()
+
           if (result.dismiss === Swal.DismissReason.timer) {
             // console.log('I was closed by the timer')
           }
@@ -255,7 +256,7 @@ export default function PlantAddOrEdit({ title }) {
       <Link to="/plants">Go to plants</Link>
 
       <div className="newContainer">
-        {loading && setTimeout(() => <Loading />, 1000)}
+        {loading && <Loading />}
 
         {error && 'Something went wrong'}
 

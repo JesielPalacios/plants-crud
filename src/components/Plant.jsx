@@ -2,9 +2,14 @@ import * as React from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getPlantService } from '../services/plant.service'
+import {
+  getPlantService,
+  deletePlantService,
+  getAllPlantsService
+} from '../services/plant.service'
 import { Button, Container, Link, Loading } from './Plant.styles'
 import { Seo } from './layout/Seo'
+import { handleDelete } from './PlantsList'
 
 export default function Plant() {
   let navigate = useNavigate()
@@ -29,7 +34,9 @@ export default function Plant() {
         subtitle="Plant profile"
       />
 
-      <Button>Delete this plant</Button>
+      <Button onClick={() => handleDelete(plantId, loading, error, dispatch)}>
+        Delete this plant
+      </Button>
       <Link to="/plants">Go to plants</Link>
 
       {loading && <Loading />}

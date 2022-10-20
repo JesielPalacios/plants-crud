@@ -36,13 +36,7 @@ export async function getPlantService(dispatch, id) {
   }
 }
 
-export async function createPlantService(
-  dispatch,
-  PlantData,
-  title,
-  id = undefined
-) {
-  console.log('title', title)
+export async function createPlantService(dispatch, PlantData, title, id) {
   dispatch(loading())
   const formData = new FormData()
   await formData.append('name', PlantData.name)
@@ -56,13 +50,13 @@ export async function createPlantService(
 
   try {
     const res =
-      (await title) === 'Create new plant'
-        ? axios.post('http://localhost:3001/api/plants', formData, {
+      title === 'Create new plant'
+        ? await axios.post('http://localhost:3001/api/plants', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           })
-        : axios.put('http://localhost:3001/api/plant/' + id, formData, {
+        : await axios.put('http://localhost:3001/api/plant/' + id, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
