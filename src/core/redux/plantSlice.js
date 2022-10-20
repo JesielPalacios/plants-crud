@@ -6,7 +6,7 @@ const Plantslice = createSlice({
     plants: [],
     plant: {},
     loading: false,
-    error: false,
+    error: false
   },
   reducers: {
     loading: (state) => {
@@ -26,6 +26,11 @@ const Plantslice = createSlice({
       state.error = false
       state.plant = action.payload
     },
+    getPlantPhoto: (state, action) => {
+      state.loading = false
+      state.error = false
+      state.plant.plantImage = action.payload
+    },
     resetPlant: (state) => {
       state.loading = false
       state.error = false
@@ -34,8 +39,8 @@ const Plantslice = createSlice({
     resetFlags: (state) => {
       state.loading = false
       state.error = false
-    },
-  },
+    }
+  }
 })
 
 export default Plantslice.reducer
@@ -44,6 +49,7 @@ export const {
   getAllPlants,
   error,
   getPlant,
+  getPlantPhoto,
   resetPlant,
-  resetFlags,
+  resetFlags
 } = Plantslice.actions

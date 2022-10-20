@@ -8,7 +8,11 @@ import Select from 'react-select'
 import { useForm } from 'react-hook-form'
 
 import { resetPlant } from '../core/redux/plantSlice'
-import { createPlantService, getPlantService } from '../services/plant.service'
+import {
+  createPlantService,
+  getPlantPhotoService,
+  getPlantService
+} from '../services/plant.service'
 import { Link, Loading } from './Plant.styles'
 import { Container, plantInputs } from './PlantAddOrEdit.styles'
 import { Seo } from './layout/Seo'
@@ -42,6 +46,10 @@ export default function PlantAddOrEdit({ title }) {
   const { plantId } = useParams()
   const dispatch = useDispatch()
   const { plant, loading, error } = useSelector((state) => state.plant)
+  console.log(
+    'useSelector((state) => state.plant)',
+    useSelector((state) => state.plant)
+  )
 
   const validateAndSend = () => {
     if (
@@ -109,58 +117,58 @@ export default function PlantAddOrEdit({ title }) {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    Swal.fire({
-      title: 'Do you want to save the changes?',
-      showDenyButton: true,
-      showCancelButton: true,
-      confirmButtonColor: '#0f1141',
-      confirmButtonText: 'Save',
-      denyButtonText: `Don't save`
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let timerInterval
-        Swal.fire({
-          html: 'Saving..!',
-          timer: 2000,
-          timerProgressBar: true,
-          didOpen: () => {
-            Swal.showLoading()
-            const b = Swal.getHtmlContainer().querySelector('b')
-            timerInterval = setInterval(() => {
-              b.textContent = Swal.getTimerLeft()
-            }, 100)
-          },
-          willClose: () => {
-            clearInterval(timerInterval)
-          }
-        }).then((result) => {
-          validateAndSend()
+    // Swal.fire({
+    //   title: 'Do you want to save the changes?',
+    //   showDenyButton: true,
+    //   showCancelButton: true,
+    //   confirmButtonColor: '#0f1141',
+    //   confirmButtonText: 'Save',
+    //   denyButtonText: `Don't save`
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     let timerInterval
+    //     Swal.fire({
+    //       html: 'Saving..!',
+    //       timer: 2000,
+    //       timerProgressBar: true,
+    //       didOpen: () => {
+    //         Swal.showLoading()
+    //         const b = Swal.getHtmlContainer().querySelector('b')
+    //         timerInterval = setInterval(() => {
+    //           b.textContent = Swal.getTimerLeft()
+    //         }, 100)
+    //       },
+    //       willClose: () => {
+    //         clearInterval(timerInterval)
+    //       }
+    //     }).then((result) => {
+    //       validateAndSend()
 
-          if (result.dismiss === Swal.DismissReason.timer) {
-            // console.log('I was closed by the timer')
-          }
-        })
-      } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info')
-      }
-    })
+    //       if (result.dismiss === Swal.DismissReason.timer) {
+    //         // console.log('I was closed by the timer')
+    //       }
+    //     })
+    //   } else if (result.isDenied) {
+    //     Swal.fire('Changes are not saved', '', 'info')
+    //   }
+    // })
 
-    // createPlantService(
-    //   dispatch,
-    //   {
-    //     name: name,
-    //     discoveredAt: discoveredAt,
-    //     benefits: benefits,
-    //     medicinal: medicinal,
-    //     flower: flower,
-    //     maximumHeight: maximumHeight,
-    //     model: model,
-    //     weight: weight,
-    //     plantPhoto
-    //   },
-    //   title,
-    //   plantId
-    // )
+    createPlantService(
+      dispatch,
+      {
+        name: name,
+        discoveredAt: discoveredAt,
+        benefits: benefits,
+        medicinal: medicinal,
+        flower: flower,
+        maximumHeight: maximumHeight,
+        model: model,
+        weight: weight,
+        plantPhoto
+      },
+      title,
+      plantId
+    )
   }
 
   const yesOrNoOptions = [
@@ -224,9 +232,13 @@ export default function PlantAddOrEdit({ title }) {
     //   dispatch(resetPlant()) &&
     //   plantId &&
     //   navigate('/plant/' + plantId)
+    async function calls() {
+      await getPlantService(dispatch, plantId)
+      // getPlantPhotoService(dispatch, plantId)
+    }
 
     title === 'Create new plant' && dispatch(resetPlant())
-    title === 'Edit plant' && getPlantService(dispatch, plantId)
+    title === 'Edit plant' && calls()
   }, [])
 
   return (
@@ -264,14 +276,18 @@ export default function PlantAddOrEdit({ title }) {
           <div className="bottom">
             <div className="left">
               <img
+                crossorigin="anonymous"
                 src={
                   plantPhoto
                     ? URL.createObjectURL(plantPhoto)
                     : // plantPhoto
-                      'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
+                    plant.plantImage
+                    ? 'http://localhost:3001' + plant.plantImage
+                    : 'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
                 }
                 alt=""
               />
+              {console.log('plant.plantImage', plant.plantImage)}
             </div>
             <div className="right">
               <form onSubmit={handleSubmit}>
@@ -294,7 +310,13 @@ export default function PlantAddOrEdit({ title }) {
                     id="name"
                     placeholder="Plant name goes here"
                     onChange={(e) => setName(e.target.value)}
-                    defaultValue={title === 'Edit plant' ? plant.name : ''}
+                    defaultValue={
+                      title === 'Edit plant'
+                        ? plant.name &&
+                          plant.name[0].toUpperCase() +
+                            plant.name.slice(1).toLowerCase()
+                        : ''
+                    }
                   />
                 </FormItem>
 

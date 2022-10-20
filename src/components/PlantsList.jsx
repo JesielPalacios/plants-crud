@@ -90,12 +90,56 @@ export default function PlantsList() {
       renderCell: (params) => {
         return (
           <div className="productListItem">
-            <img
+            {/* <img
+              // crossOrigin="anonymous"
+              // crossorigin="anonymous"
+              crossorigin={params.row.plantImage ? 'anonymous' : ''}
               className="productListImg"
               // src="https://via.placeholder.com/520x460"
-              src="https://www.elmueble.com/medio/2019/01/22/plantas-medicinales-valeriana_6340d15a_543x543.jpg"
-              alt="plant avatar image"
-            />
+              // src="https://www.elmueble.com/medio/2019/01/22/plantas-medicinales-valeriana_6340d15a_543x543.jpg"
+              src={
+                params.row.plantImage
+                  ? 'http://localhost:3001' + params.row.plantImage
+                  : 'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
+              }
+              // alt="plant avatar image of plant"
+            /> */}
+
+            {/*  */}
+            {/*  */}
+            {/*  */}
+            {/*  */}
+            {/*  */}
+            {/*  */}
+            {/*  */}
+            {params.row.plantImage ? (
+              <img
+                crossOrigin="anonymous"
+                // crossorigin="anonymous"
+                className="productListImg"
+                // src="https://via.placeholder.com/520x460"
+                // src="https://www.elmueble.com/medio/2019/01/22/plantas-medicinales-valeriana_6340d15a_543x543.jpg"
+                src={
+                  params.row.plantImage
+                    ? 'http://localhost:3001' + params.row.plantImage
+                    : 'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
+                }
+                // alt="plant avatar image of plant"
+              />
+            ) : (
+              <img
+                // crossOrigin="anonymous"
+                className="productListImg"
+                // src="https://via.placeholder.com/520x460"
+                // src="https://www.elmueble.com/medio/2019/01/22/plantas-medicinales-valeriana_6340d15a_543x543.jpg"
+                src={
+                  params.row.plantImage
+                    ? 'http://localhost:3001' + params.row.plantImage
+                    : 'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
+                }
+                // alt="plant avatar image of plant"
+              />
+            )}
             <LinkRouter to={'/plant/' + params.row._id} className="title">
               {params.row.name
                 .trim()

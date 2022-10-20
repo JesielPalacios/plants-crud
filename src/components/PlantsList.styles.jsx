@@ -23,7 +23,7 @@ export const Container = styled.div`
     border: none;
     // height: 100%;
     margin: 0px;
-    border-radius: 0.5rem;
+    /* border-radius: 0.5rem; */
     border-radius: 10px;
     padding: 0.5rem 0.5rem;
     font-weight: 600;

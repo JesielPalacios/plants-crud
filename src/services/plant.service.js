@@ -4,6 +4,7 @@ import {
   error,
   getAllPlants,
   getPlant,
+  getPlantPhoto,
   resetFlags
 } from '../core/redux/plantSlice.js'
 
@@ -47,6 +48,7 @@ export async function createPlantService(dispatch, PlantData, title, id) {
   await formData.append('maximumHeight', PlantData.maximumHeight)
   await formData.append('model', PlantData.model)
   await formData.append('weight', PlantData.weight)
+  await formData.append('plantPhoto', PlantData.plantPhoto)
 
   try {
     const res =
@@ -83,6 +85,22 @@ export async function deletePlantService(dispatch, id) {
     dispatch(resetFlags())
   } catch (err) {
     dispatch(getPlant({}))
+    // console.log('error', err)
+    dispatch(error())
+  }
+}
+
+export async function getPlantPhotoService(dispatch, id) {
+  console.log('id', id)
+  dispatch(loading())
+
+  try {
+    const res = await axios.get('http://localhost:3001/api/photo/' + id, {})
+
+    dispatch(getPlantPhoto(res.data))
+    // console.log('res', res.data)
+  } catch (err) {
+    dispatch(getPlantPhoto(''))
     // console.log('error', err)
     dispatch(error())
   }
