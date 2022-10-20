@@ -134,7 +134,7 @@ export const Link = styled(LinkRouter)`
   top: ${({ top }) => (top ? top : '-55px')};
   right: ${({ right }) => (right ? right : '0')};
   text-decoration: none;
-  
+
   border: none;
   // height: 100%;
   margin: 0px;
@@ -142,7 +142,7 @@ export const Link = styled(LinkRouter)`
   border-radius: 10px;
   padding: 0.5rem 1rem;
   font-weight: 600;
-  border: 1px solid #0F1141;
+  border: 1px solid #0f1141;
   background: none;
   // color: #f5a800;
   cursor: pointer;
@@ -151,7 +151,7 @@ export const Link = styled(LinkRouter)`
   font-size: 15px;
 
   :hover {
-    background-color: #0F1141;
+    background-color: #0f1141;
     color: #ffffff;
   }
 `
@@ -168,7 +168,7 @@ export const Button = styled.button`
   border-radius: 10px;
   padding: 0.5rem 1rem;
   font-weight: 600;
-  border: 1px solid #0F1141;
+  border: 1px solid #0f1141;
   /* background: #f5f5f5; */
   /* background: #eeeeee; */
   background: none;
@@ -178,7 +178,7 @@ export const Button = styled.button`
   font-size: 15px;
 
   :hover {
-    background-color: #0F1141;
+    background-color: #0f1141;
     color: #ffffff;
   }
 `

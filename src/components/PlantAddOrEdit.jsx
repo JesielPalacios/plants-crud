@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form'
 
 import { resetPlant } from '../core/redux/plantSlice'
 import { createPlantService, getPlantService } from '../services/plant.service'
-import { Link } from './Plant.styles'
+import { Link, Loading } from './Plant.styles'
 import { Container, plantInputs } from './PlantAddOrEdit.styles'
 import { Seo } from './layout/Seo'
 
@@ -43,110 +43,130 @@ export default function PlantAddOrEdit({ title }) {
   const dispatch = useDispatch()
   const { plant, loading, error } = useSelector((state) => state.plant)
 
-  // console.log(
-  //   'useSelector((state) => state)',
-  //   useSelector((state) => state)
-  // )
+  const validateAndSend = () => {
+    if (
+      name != null &&
+      discoveredAt != null &&
+      benefits != null &&
+      medicinal != null &&
+      flower != null &&
+      maximumHeight != null &&
+      model != null
+    ) {
+      if (plantPhoto != null) {
+        if (
+          !(
+            plantPhoto.name.endsWith('.png') ||
+            plantPhoto.name.endsWith('.jpg') ||
+            plantPhoto.name.endsWith('.jpeg')
+          )
+        ) {
+          Swal.fire({
+            title: '<strong>Error de archivo</strong>',
+            icon: 'error',
+            html: 'This type of file cannot be accepted, choose an image of the indicated type!',
+            showCloseButton: true,
+            showCancelButton: false,
+            focusConfirm: false,
+            confirmButtonText: 'Accept',
+            confirmButtonAriaLabel: 'Accept'
+          })
+        }
+      }
 
-  // const validateAndSend = () => {
-  //   if (name != null && discoveredAt != null && benefits != null && medicinal != null && flower != null && maximumHeight != null && model != null) {
-  //     if (plantPhoto != null) {
-  //       if (!(plantPhoto.name.endsWith('.png') || plantPhoto.name.endsWith('.jpg') || plantPhoto.name.endsWith('.jpeg'))) {
-  //         Swal.fire({
-  //           title: '<strong>Error de archivo</strong>',
-  //           icon: 'error',
-  //           html: 'This type of file cannot be accepted, choose an image of the indicated type!',
-  //           showCloseButton: true,
-  //           showCancelButton: false,
-  //           focusConfirm: false,
-  //           confirmButtonText: 'Accept',
-  //           confirmButtonAriaLabel: 'Accept'
-  //         })
-  //       }
-  //     }
-
-  //     createPlantService(dispatch, {
-  //       name: name.value,
-  //       discoveredAt: discoveredAt.value,
-  //       benefits: benefits.value,
-  //       medicinal: medicinal.value,
-  //       flower: flower.value,
-  //       maximumHeight: maximumHeight.value,
-  //       model: model.value,
-  //       weight: weight.value,
-  //       plantPhoto
-  //     }).then((id) => navigate('/plant/' + id))
-  //   } else {
-  //     Swal.fire({
-  //       title: '<strong>Faltan datos</strong>',
-  //       icon: 'error',
-  //       html: 'Check the information provided!',
-  //       showCloseButton: true,
-  //       showCancelButton: true,
-  //       focusConfirm: false,
-  //       confirmButtonText: 'Try again',
-  //       confirmButtonAriaLabel: 'Try again',
-  //       cancelButtonText: 'Cancel',
-  //       cancelButtonAriaLabel: 'Cancel'
-  //     })
-  //   }
-  // }
+      createPlantService(
+        dispatch,
+        {
+          name: name,
+          discoveredAt: discoveredAt,
+          benefits: benefits,
+          medicinal: medicinal,
+          flower: flower,
+          maximumHeight: maximumHeight,
+          model: model,
+          weight: weight,
+          plantPhoto
+        },
+        title,
+        plantId
+      ).then((id) => navigate('/plant/' + id))
+    } else {
+      Swal.fire({
+        title: '<strong>Faltan datos</strong>',
+        icon: 'error',
+        html: 'Check the information provided!',
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: 'Try again',
+        confirmButtonAriaLabel: 'Try again',
+        cancelButtonText: 'Cancel',
+        cancelButtonAriaLabel: 'Cancel'
+      })
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    // Swal.fire({
-    //   title: 'Do you want to save the changes?',
-    //   showDenyButton: true,
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#0f1141',
-    //   confirmButtonText: 'Save',
-    //   denyButtonText: `Don't save`,
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     let timerInterval
-    //     Swal.fire({
-    //       html: 'Saving..!',
-    //       timer: 2000,
-    //       timerProgressBar: true,
-    //       didOpen: () => {
-    //         Swal.showLoading()
-    //         const b = Swal.getHtmlContainer().querySelector('b')
-    //         timerInterval = setInterval(() => {
-    //           b.textContent = Swal.getTimerLeft()
-    //         }, 100)
-    //       },
-    //       willClose: () => {
-    //         clearInterval(timerInterval)
-    //       },
-    //     }).then(async (result) => {
-    //       await validateAndSend()
-    //       if (result.dismiss === Swal.DismissReason.timer) {
-    //         // console.log('I was closed by the timer')
-    //       }
-    //     })
-    //   } else if (result.isDenied) {
-    //     Swal.fire('Changes are not saved', '', 'info')
-    //   }
-    // })
-
-    createPlantService(dispatch, {
-      name: name,
-      discoveredAt: discoveredAt,
-      benefits: benefits,
-      medicinal: medicinal,
-      flower: flower,
-      maximumHeight: maximumHeight,
-      model: model,
-      weight: weight,
-      plantPhoto
+    Swal.fire({
+      title: 'Do you want to save the changes?',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonColor: '#0f1141',
+      confirmButtonText: 'Save',
+      denyButtonText: `Don't save`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let timerInterval
+        Swal.fire({
+          html: 'Saving..!',
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading()
+            const b = Swal.getHtmlContainer().querySelector('b')
+            timerInterval = setInterval(() => {
+              b.textContent = Swal.getTimerLeft()
+            }, 100)
+          },
+          willClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then(async (result) => {
+          await validateAndSend()
+          if (result.dismiss === Swal.DismissReason.timer) {
+            // console.log('I was closed by the timer')
+          }
+        })
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+      }
     })
+
+    // createPlantService(
+    //   dispatch,
+    //   {
+    //     name: name,
+    //     discoveredAt: discoveredAt,
+    //     benefits: benefits,
+    //     medicinal: medicinal,
+    //     flower: flower,
+    //     maximumHeight: maximumHeight,
+    //     model: model,
+    //     weight: weight,
+    //     plantPhoto
+    //   },
+    //   title,
+    //   plantId
+    // )
   }
 
   const yesOrNoOptions = [
     { value: 'yes', label: 'Yes' },
     { value: 'no', label: 'No' }
   ]
+
   const modelCategoryOptions = [
     { value: 'Medicinal', label: 'Medicinal' },
     { value: 'Edible (even raw)', label: 'Edible (even raw)' },
@@ -199,13 +219,13 @@ export default function PlantAddOrEdit({ title }) {
   }
 
   useEffect(() => {
-    title === 'Create new plant' &&
-      dispatch(resetPlant()) &&
-      plantId &&
-      navigate('/plant/' + plantId)
+    // title === 'Create new plant' &&
+    //   dispatch(resetPlant()) &&
+    //   plantId &&
+    //   navigate('/plant/' + plantId)
+
+    title === 'Create new plant' && dispatch(resetPlant())
     title === 'Edit plant' && getPlantService(dispatch, plantId)
-    console.log(title)
-    console.log(plant)
   }, [])
 
   return (
@@ -234,77 +254,106 @@ export default function PlantAddOrEdit({ title }) {
       )}
       <Link to="/plants">Go to plants</Link>
 
-      <div className="newContainer scroll">
-        <div className="bottom">
-          <div className="left">
-            <img
-              src={
-                plantPhoto
-                  ? URL.createObjectURL(plantPhoto)
-                  : // plantPhoto
-                    'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
-              }
-              alt=""
-            />
-          </div>
-          <div className="right">
-            <form onSubmit={handleSubmit}>
-              <div className="formInput">
-                <label htmlFor="plantPhoto" className="button">
-                  Click here to choose the image:{' '}
-                  <DriveFolderUploadOutlinedIcon className="icon" />
-                </label>
-                <input
-                  type="file"
-                  id="plantPhoto"
-                  style={{ display: 'none' }}
-                  onChange={(e) => setPlantPhoto(e.target.files[0])}
-                />
-              </div>
+      <div className="newContainer">
+        {loading && setTimeout(() => <Loading />, 1000)}
 
-              <FormItem id="name" title="Name" important={true}>
-                <input
-                  type="text"
-                  id="name"
-                  placeholder="Plant name goes here"
-                  onChange={(e) => setName(e.target.value)}
-                  defaultValue={title === 'Edit plant' ? plant.name : ''}
-                />
-              </FormItem>
+        {error && 'Something went wrong'}
 
-              <FormItem
-                id="discoveredAt"
-                title="Discovery date"
-                important={true}
-              >
-                <input
-                  type="date"
+        {!loading && plant && (
+          <div className="bottom">
+            <div className="left">
+              <img
+                src={
+                  plantPhoto
+                    ? URL.createObjectURL(plantPhoto)
+                    : // plantPhoto
+                      'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
+                }
+                alt=""
+              />
+            </div>
+            <div className="right">
+              <form onSubmit={handleSubmit}>
+                <div className="formInput">
+                  <label htmlFor="plantPhoto" className="button">
+                    Click here to choose the image:{' '}
+                    <DriveFolderUploadOutlinedIcon className="icon" />
+                  </label>
+                  <input
+                    type="file"
+                    id="plantPhoto"
+                    style={{ display: 'none' }}
+                    onChange={(e) => setPlantPhoto(e.target.files[0])}
+                  />
+                </div>
+
+                <FormItem id="name" title="Name" important={true}>
+                  <input
+                    type="text"
+                    id="name"
+                    placeholder="Plant name goes here"
+                    onChange={(e) => setName(e.target.value)}
+                    defaultValue={title === 'Edit plant' ? plant.name : ''}
+                  />
+                </FormItem>
+
+                <FormItem
                   id="discoveredAt"
-                  placeholder="Plant discovery date goes here"
-                  onChange={(e) => setDiscoveredAt(e.target.value)}
-                  defaultValue={
-                    title === 'Edit plant'
-                      ? fortmatDate(plant.discoveredAt)
-                      : ''
-                  }
-                />
-              </FormItem>
+                  title="Discovery date"
+                  important={true}
+                >
+                  <input
+                    type="date"
+                    id="discoveredAt"
+                    placeholder="Plant discovery date goes here"
+                    onChange={(e) => setDiscoveredAt(e.target.value)}
+                    defaultValue={
+                      title === 'Edit plant'
+                        ? fortmatDate(plant.discoveredAt)
+                        : ''
+                    }
+                  />
+                </FormItem>
 
-              <FormItem id="benefits" title="Benefits" important={true}>
-                <textarea
-                  id="benefits"
-                  placeholder="Benefits plant description goes here"
-                  onChange={(e) => setBenefits(e.target.value)}
-                  defaultValue={title === 'Edit plant' ? plant.benefits : ''}
-                />
-              </FormItem>
+                <FormItem id="benefits" title="Benefits" important={true}>
+                  <textarea
+                    id="benefits"
+                    placeholder="Benefits plant description goes here"
+                    onChange={(e) => setBenefits(e.target.value)}
+                    defaultValue={title === 'Edit plant' ? plant.benefits : ''}
+                  />
+                </FormItem>
 
-              <FormItem
-                id="medicinal"
-                title="Is the plant medicinal?"
-                important={true}
-              >
-                {plant.medicinal && (
+                <FormItem
+                  id="medicinal"
+                  title="Is the plant medicinal?"
+                  important={true}
+                >
+                  <Select
+                    id="medicinal"
+                    options={yesOrNoOptions}
+                    placeholder={'Click here to select'}
+                    isClearable={true}
+                    hideSelectedOptions={true}
+                    isSearchable={false}
+                    styles={customStyles}
+                    onChange={setFlower}
+                    defaultValue={
+                      title === 'Edit plant'
+                        ? {
+                            value: plant.medicinal,
+                            label: plant.medicinal
+                          }
+                        : ''
+                    }
+                  />
+                </FormItem>
+
+                <FormItem
+                  id="flower"
+                  title="Does the plant have a flower?"
+                  important={true}
+                >
                   <Select
                     id="flower"
                     options={yesOrNoOptions}
@@ -314,55 +363,34 @@ export default function PlantAddOrEdit({ title }) {
                     isSearchable={false}
                     styles={customStyles}
                     onChange={setFlower}
-                    defaultValue={{
-                      value: plant.medicinal,
-                      label: plant.medicinal
-                    }}
+                    defaultValue={
+                      title === 'Edit plant'
+                        ? {
+                            value: plant.flower,
+                            label: plant.flower
+                          }
+                        : ''
+                    }
                   />
-                )}
-              </FormItem>
+                </FormItem>
 
-              <FormItem
-                id="flower"
-                title="Does the plant have a flower?"
-                important={true}
-              >
-                {plant.flower && (
-                  <Select
-                    id="flower"
-                    options={yesOrNoOptions}
-                    placeholder={'Click here to select'}
-                    isClearable={true}
-                    hideSelectedOptions={true}
-                    isSearchable={false}
-                    styles={customStyles}
-                    onChange={setFlower}
-                    defaultValue={{
-                      value: plant.flower,
-                      label: plant.flower
-                    }}
-                  />
-                )}
-              </FormItem>
-
-              <FormItem
-                id="maximumHeight"
-                title="Maximum height"
-                important={true}
-              >
-                <input
-                  type="number"
+                <FormItem
                   id="maximumHeight"
-                  placeholder="Maximum plant height goes here"
-                  onChange={(e) => setMaximumHeight(e.target.value)}
-                  defaultValue={
-                    title === 'Edit plant' ? plant.maximumHeight : ''
-                  }
-                />
-              </FormItem>
+                  title="Maximum height"
+                  important={true}
+                >
+                  <input
+                    type="number"
+                    id="maximumHeight"
+                    placeholder="Maximum plant height goes here"
+                    onChange={(e) => setMaximumHeight(e.target.value)}
+                    defaultValue={
+                      title === 'Edit plant' ? plant.maximumHeight : ''
+                    }
+                  />
+                </FormItem>
 
-              <FormItem id="model" title="Model (category)" important={true}>
-                {plant.model && (
+                <FormItem id="model" title="Model (category)" important={true}>
                   <Select
                     id="model"
                     options={modelCategoryOptions}
@@ -372,30 +400,34 @@ export default function PlantAddOrEdit({ title }) {
                     isSearchable={false}
                     styles={customStyles}
                     onChange={setModel}
-                    defaultValue={{
-                      value: plant.model,
-                      label: plant.model
-                    }}
+                    defaultValue={
+                      title === 'Edit plant'
+                        ? {
+                            value: plant.model,
+                            label: plant.model
+                          }
+                        : ''
+                    }
                   />
-                )}
-              </FormItem>
+                </FormItem>
 
-              <FormItem id="weight" title="Weight">
-                <input
-                  type="number"
-                  id="weight"
-                  placeholder="Plant weight height goes here"
-                  onChange={(e) => setWeight(e.target.value)}
-                  defaultValue={title === 'Edit plant' ? plant.weight : ''}
-                />
-              </FormItem>
+                <FormItem id="weight" title="Weight">
+                  <input
+                    type="number"
+                    id="weight"
+                    placeholder="Plant weight height goes here"
+                    onChange={(e) => setWeight(e.target.value)}
+                    defaultValue={title === 'Edit plant' ? plant.weight : ''}
+                  />
+                </FormItem>
 
-              <button>
-                Save plant <SaveIcon className="icon" />
-              </button>
-            </form>
+                <button>
+                  Save plant <SaveIcon className="icon" />
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </Container>
   )

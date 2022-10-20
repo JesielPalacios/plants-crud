@@ -4,7 +4,10 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link as LinkRouter } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import { deletePlantService, getAllPlantsService } from '../services/plant.service'
+import {
+  deletePlantService,
+  getAllPlantsService
+} from '../services/plant.service'
 import { Seo } from './layout/Seo'
 import { Button, Link, Loading } from './Plant.styles'
 import { Container } from './PlantsList.styles'
@@ -18,7 +21,8 @@ export default function PlantsList() {
     await deletePlantService(dispatch, id)
     getAllPlantsService(dispatch)
 
-    !error && Swal.fire('Plant deleted!', 'Plant deleted successfully!', 'success')
+    !error &&
+      Swal.fire('Plant deleted!', 'Plant deleted successfully!', 'success')
   }
 
   const handleUpdate = () => {
@@ -29,7 +33,7 @@ export default function PlantsList() {
       showCancelButton: true,
       confirmButtonColor: '#0f1141',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, update it!',
+      confirmButtonText: 'Yes, update it!'
     }).then((result) => {
       if (result.isConfirmed) {
         let timerInterval
@@ -47,7 +51,7 @@ export default function PlantsList() {
           },
           willClose: () => {
             clearInterval(timerInterval)
-          },
+          }
         }).then((result) => {
           getAllPlantsService(dispatch)
           /* Read more about handling dismissals below */
@@ -78,10 +82,12 @@ export default function PlantsList() {
             {params.row.name
               .trim()
               .toLowerCase()
-              .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()))}
+              .replace(/\w\S*/g, (w) =>
+                w.replace(/^\w/, (c) => c.toUpperCase())
+              )}
           </div>
         )
-      },
+      }
     },
     {
       field: 'createdAt',
@@ -90,10 +96,12 @@ export default function PlantsList() {
       renderCell: (params) => {
         return (
           <div className="productListItem">
-            {params.row.createdAt.slice(8, 10)} -{params.row.createdAt.slice(5, 7)} -{params.row.createdAt.slice(0, 4)}
+            {params.row.createdAt.slice(8, 10)} -
+            {params.row.createdAt.slice(5, 7)} -
+            {params.row.createdAt.slice(0, 4)}
           </div>
         )
-      },
+      }
     },
     {
       field: 'discoveredAt',
@@ -102,36 +110,46 @@ export default function PlantsList() {
       renderCell: (params) => {
         return (
           <div className="productListItem">
-            {params.row.discoveredAt.slice(8, 10)} -{params.row.discoveredAt.slice(5, 7)} -{params.row.discoveredAt.slice(0, 4)}
+            {params.row.discoveredAt.slice(8, 10)} -
+            {params.row.discoveredAt.slice(5, 7)} -
+            {params.row.discoveredAt.slice(0, 4)}
           </div>
         )
-      },
+      }
     },
     {
       field: 'benefits',
       headerName: 'Benefits',
-      width: 250,
+      width: 250
     },
     {
       field: 'medicinal',
       headerName: 'Is it medicinal?',
       width: 125,
       renderCell: (params) => {
-        return <div className={`cellWithStatus ${params.row.medicinal}`}>{params.row.medicinal}</div>
-      },
+        return (
+          <div className={`cellWithStatus ${params.row.medicinal}`}>
+            {params.row.medicinal}
+          </div>
+        )
+      }
     },
     {
       field: 'flower',
       headerName: 'Does it have a flower?',
       width: 175,
       renderCell: (params) => {
-        return <div className={`cellWithStatus ${params.row.flower}`}>{params.row.flower}</div>
-      },
+        return (
+          <div className={`cellWithStatus ${params.row.flower}`}>
+            {params.row.flower}
+          </div>
+        )
+      }
     },
     {
       field: 'maximumHeight',
       headerName: 'Maximum height',
-      width: 140,
+      width: 140
     },
     {
       field: 'action',
@@ -143,11 +161,14 @@ export default function PlantsList() {
             <LinkRouter to={'/plant/' + params.row._id}>
               <button className="productListEdit">Edit</button>
             </LinkRouter>
-            <DeleteOutlinedIcon className="productListDelete" onClick={() => handleDelete(params.row._id)} />
+            <DeleteOutlinedIcon
+              className="productListDelete"
+              onClick={() => handleDelete(params.row._id)}
+            />
           </>
         )
-      },
-    },
+      }
+    }
   ]
 
   useEffect(() => {
@@ -167,7 +188,21 @@ export default function PlantsList() {
       <div className="productList">
         {loading && <Loading />}
 
-        {error ? 'Hubo un error' : <DataGrid rows={plants} disableSelectionOnClick columns={columns} pageSize={10} checkboxSelection rowHeight={70} showColumnRightBorder={true} getRowId={(row) => row._id} loading={loading} rowsPerPageOptions={[10]} />}
+        {error ? (
+          'Hubo un error'
+        ) : (
+          <DataGrid
+            rows={plants}
+            disableSelectionOnClick
+            columns={columns}
+            pageSize={50}
+            checkboxSelection
+            showColumnRightBorder={true}
+            getRowId={(row) => row._id}
+            loading={loading}
+            rowsPerPageOptions={[50]}
+          />
+        )}
       </div>
     </Container>
   )

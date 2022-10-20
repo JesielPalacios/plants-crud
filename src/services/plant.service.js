@@ -1,5 +1,11 @@
 import axios from 'axios'
-import { loading, error, getAllPlants, getPlant, resetFlags } from '../core/redux/plantSlice.js'
+import {
+  loading,
+  error,
+  getAllPlants,
+  getPlant,
+  resetFlags
+} from '../core/redux/plantSlice.js'
 
 export async function getAllPlantsService(dispatch) {
   dispatch(loading())
@@ -30,7 +36,13 @@ export async function getPlantService(dispatch, id) {
   }
 }
 
-export async function createPlantService(dispatch, PlantData) {
+export async function createPlantService(
+  dispatch,
+  PlantData,
+  title,
+  id = undefined
+) {
+  console.log('title', title)
   dispatch(loading())
   const formData = new FormData()
   await formData.append('name', PlantData.name)
@@ -41,14 +53,21 @@ export async function createPlantService(dispatch, PlantData) {
   await formData.append('maximumHeight', PlantData.maximumHeight)
   await formData.append('model', PlantData.model)
   await formData.append('weight', PlantData.weight)
-  
+
   try {
-    const res = await axios.post('http://localhost:3001/api/plants', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-    
+    const res =
+      (await title) === 'Create new plant'
+        ? axios.post('http://localhost:3001/api/plants', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+        : axios.put('http://localhost:3001/api/plant/' + id, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+
     // console.log('res', res.data)
     dispatch(getPlant(res.data))
     // dispatch(resetFlags())
@@ -68,7 +87,6 @@ export async function deletePlantService(dispatch, id) {
     const res = await axios.delete('http://localhost:3001/api/plant/' + id, {})
     // console.log('res', res)
     dispatch(resetFlags())
-
   } catch (err) {
     dispatch(getPlant({}))
     // console.log('error', err)

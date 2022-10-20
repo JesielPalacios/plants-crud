@@ -95,10 +95,13 @@ export const Container = styled.div`
               max-width: 100%;
               min-width: 100%;
               max-height: 200px;
-              max-height: 80px;
-              min-height: 60%;
+              /* max-height: 80px; */
+              min-height: 67.5%;
+              /* min-height: 40%; */
 
               height: 42px;
+              height: 37px;
+              /* height: 59px; */
             }
           }
 
