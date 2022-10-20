@@ -2,7 +2,7 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { DataGrid } from '@mui/x-data-grid'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link as LinkRouter } from 'react-router-dom'
+import { Link as LinkRouter, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import {
   deletePlantService,
@@ -12,34 +12,35 @@ import { Seo } from './layout/Seo'
 import { Button, Link, Loading } from './Plant.styles'
 import { Container } from './PlantsList.styles'
 
-export function handleDelete(id, loading, error, dispatch) {
-  Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!'
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      await deletePlantService(dispatch, id)
-      getAllPlantsService(dispatch)
-
-      !(loading && error) &&
-        Swal.fire(
-          'Plant deleted!',
-          'Plant has been deleted successfully!',
-          'success'
-        )
-    }
-  })
-}
-
 export default function PlantsList() {
   const { plants, loading, error } = useSelector((state) => state.plant)
-
+  const navigate = useNavigate()
   const dispatch = useDispatch()
+
+  function handleDelete(id) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deletePlantService(dispatch, id)
+        getAllPlantsService(dispatch)
+
+        !(loading && error) &&
+          Swal.fire(
+            'Plant deleted!',
+            'Plant has been deleted successfully!',
+            'success'
+          )
+      }
+    })
+    navigate('/plants')
+  }
 
   const handleUpdate = () => {
     Swal.fire({
@@ -85,7 +86,7 @@ export default function PlantsList() {
     {
       field: 'name',
       headerName: 'Plant name',
-      width: 179,
+      width: 209,
       renderCell: (params) => {
         return (
           <div className="productListItem">
@@ -95,12 +96,14 @@ export default function PlantsList() {
               src="https://www.elmueble.com/medio/2019/01/22/plantas-medicinales-valeriana_6340d15a_543x543.jpg"
               alt="plant avatar image"
             />
-            {params.row.name
-              .trim()
-              .toLowerCase()
-              .replace(/\w\S*/g, (w) =>
-                w.replace(/^\w/, (c) => c.toUpperCase())
-              )}
+            <LinkRouter to={'/plant/' + params.row._id} className="title">
+              {params.row.name
+                .trim()
+                .toLowerCase()
+                .replace(/\w\S*/g, (w) =>
+                  w.replace(/^\w/, (c) => c.toUpperCase())
+                )}
+            </LinkRouter>
           </div>
         )
       }
@@ -170,18 +173,20 @@ export default function PlantsList() {
     {
       field: 'action',
       headerName: 'Actions',
-      width: 150,
+      width: 120,
       renderCell: (params) => {
         return (
           <>
-            <LinkRouter to={'/plant/' + params.row._id}>
-              <button className="productListEdit">Edit</button>
+            <LinkRouter
+              to={'/plant/' + params.row._id + '/edit'}
+              className="button"
+            >
+              {/* <button className="productListEdit">Edit</button> */}
+              Edit
             </LinkRouter>
             <DeleteOutlinedIcon
               className="productListDelete"
-              onClick={() =>
-                handleDelete(params.row._id, loading, error, dispatch)
-              }
+              onClick={() => handleDelete(params.row._id)}
             />
           </>
         )

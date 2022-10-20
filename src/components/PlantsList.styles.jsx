@@ -13,6 +13,49 @@ export const Container = styled.div`
   -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
   box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
 
+  .button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-decoration: none;
+
+    border: none;
+    // height: 100%;
+    margin: 0px;
+    border-radius: 0.5rem;
+    border-radius: 10px;
+    padding: 0.5rem 0.5rem;
+    font-weight: 600;
+    border: 1px solid #0f1141;
+    background: none;
+    // color: #f5a800;
+    cursor: pointer;
+    transition: all 500ms ease 0s;
+    color: #000;
+    font-size: 15px;
+    
+    :hover {
+      background-color: #0f1141;
+      color: #ffffff;
+    }
+  }
+  
+  .title {
+    transition: all 500ms ease 0s;
+    border-radius: 10px;
+    padding: 0.2rem 0;
+    
+    :hover {
+      background-color: #0f1141;
+      color: #ffffff;
+    }
+  }
+
+  .noBorder {
+    border: none;
+  }
+
   .productList {
     flex: 4;
     height: 80vh;

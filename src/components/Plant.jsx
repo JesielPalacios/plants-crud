@@ -9,13 +9,39 @@ import {
 } from '../services/plant.service'
 import { Button, Container, Link, Loading } from './Plant.styles'
 import { Seo } from './layout/Seo'
-import { handleDelete } from './PlantsList'
+import Swal from 'sweetalert2'
 
 export default function Plant() {
   let navigate = useNavigate()
   const { plantId } = useParams()
   const dispatch = useDispatch()
   const { plant, loading, error } = useSelector((state) => state.plant)
+
+  function handleDelete(id) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deletePlantService(dispatch, id)
+        getAllPlantsService(dispatch)
+
+        !(loading && error) &&
+          Swal.fire(
+            'Plant deleted!',
+            'Plant has been deleted successfully!',
+            'success'
+          )
+
+        navigate('/plants')
+      }
+    })
+  }
 
   useEffect(() => {
     getPlantService(dispatch, plantId)
@@ -34,9 +60,7 @@ export default function Plant() {
         subtitle="Plant profile"
       />
 
-      <Button onClick={() => handleDelete(plantId, loading, error, dispatch)}>
-        Delete this plant
-      </Button>
+      <Button onClick={() => handleDelete(plantId)}>Delete this plant</Button>
       <Link to="/plants">Go to plants</Link>
 
       {loading && <Loading />}
