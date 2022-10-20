@@ -275,18 +275,31 @@ export default function PlantAddOrEdit({ title }) {
         {!loading && plant && (
           <div className="bottom">
             <div className="left">
-              <img
-                crossorigin="anonymous"
-                src={
-                  plantPhoto
-                    ? URL.createObjectURL(plantPhoto)
-                    : // plantPhoto
-                    plant.plantImage
-                    ? 'http://localhost:3001' + plant.plantImage
-                    : 'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
-                }
-                alt=""
-              />
+              {plant.plantImage ? (
+                <img
+                  crossorigin="anonymous"
+                  crossOrigin="anonymous"
+                  src={
+                    plantPhoto
+                      ? URL.createObjectURL(plantPhoto)
+                      : // plantPhoto
+                      plant.plantImage
+                      ? 'http://localhost:3001' + plant.plantImage
+                      : 'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
+                  }
+                  alt=""
+                />
+              ) : (
+                <img
+                  src={
+                    plantPhoto
+                      ? URL.createObjectURL(plantPhoto)
+                      : 'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
+                  }
+                  alt=""
+                />
+              )}
+
               {console.log('plant.plantImage', plant.plantImage)}
             </div>
             <div className="right">

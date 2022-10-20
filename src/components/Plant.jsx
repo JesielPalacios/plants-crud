@@ -72,15 +72,28 @@ export default function Plant() {
           <div className="left">
             <h1 className="title">Information</h1>
             <div className="item">
-              <img
-                crossorigin="anonymous"
-                // src="https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
-                // src="https://via.placeholder.com/520x460"
-                // src="https://www.elmueble.com/medio/2019/01/22/plantas-medicinales-valeriana_6340d15a_543x543.jpg"
-                src={'http://localhost:3001' + plant.plantImage}
-                alt={'Plant image or avatar ' + plant.name}
-                className="itemImg"
-              />
+              {plant.plantImage ? (
+                <img
+                  crossorigin="anonymous"
+                  crossOrigin="anonymous"
+                  // src="https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
+                  // src="https://via.placeholder.com/520x460"
+                  // src="https://www.elmueble.com/medio/2019/01/22/plantas-medicinales-valeriana_6340d15a_543x543.jpg"
+                  src={'http://localhost:3001' + plant.plantImage}
+                  alt={'Plant image or avatar ' + plant.name}
+                  className="itemImg"
+                />
+              ) : (
+                <img
+                  // src="https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"
+                  // src="https://via.placeholder.com/520x460"
+                  // src="https://www.elmueble.com/medio/2019/01/22/plantas-medicinales-valeriana_6340d15a_543x543.jpg"
+                  src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                  alt={'Plant image or avatar ' + plant.name}
+                  className="itemImg"
+                />
+              )}
+
               <div className="details">
                 <h1 className="itemTitle">
                   {plant.name &&

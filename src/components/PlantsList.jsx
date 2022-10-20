@@ -114,8 +114,8 @@ export default function PlantsList() {
             {/*  */}
             {params.row.plantImage ? (
               <img
-                crossOrigin="anonymous"
-                // crossorigin="anonymous"
+              // crossorigin="anonymous"
+              crossOrigin="anonymous"
                 className="productListImg"
                 // src="https://via.placeholder.com/520x460"
                 // src="https://www.elmueble.com/medio/2019/01/22/plantas-medicinales-valeriana_6340d15a_543x543.jpg"
