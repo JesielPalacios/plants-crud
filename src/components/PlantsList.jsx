@@ -1,6 +1,6 @@
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { DataGrid } from '@mui/x-data-grid'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link as LinkRouter, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -11,11 +11,12 @@ import {
 import { Seo } from './layout/Seo'
 import { Button, Link, Loading } from './Plant.styles'
 import { Container } from './PlantsList.styles'
-
+ 
 export default function PlantsList() {
   const { plants, loading, error } = useSelector((state) => state.plant)
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [showFixed, setShowFixed] = useState(false)
 
   function handleDelete(id) {
     Swal.fire({
@@ -114,8 +115,8 @@ export default function PlantsList() {
             {/*  */}
             {params.row.plantImage ? (
               <img
-              // crossorigin="anonymous"
-              crossOrigin="anonymous"
+                // crossorigin="anonymous"
+                crossOrigin="anonymous"
                 className="productListImg"
                 // src="https://via.placeholder.com/520x460"
                 // src="https://www.elmueble.com/medio/2019/01/22/plantas-medicinales-valeriana_6340d15a_543x543.jpg"
@@ -240,18 +241,27 @@ export default function PlantsList() {
 
   useEffect(() => {
     getAllPlantsService(dispatch)
-  }, [])
+
+    const onScroll = (e) => {
+      const newShowFixed = window.scrollY > 200
+      showFixed !== newShowFixed && setShowFixed(newShowFixed)
+    }
+
+    document.addEventListener('scroll', onScroll)
+
+    return () => document.removeEventListener('scroll', onScroll)
+  }, [showFixed])
+
 
   return (
     <Container>
       <Seo title="Plants list" subtitle="Plant list from Warehouse Receipts" />
 
-      <Link to="/plants/new">Create new plant</Link>
+      {/* <Link to="/plants/new">Create new plant</Link> */}
 
-      <Button right="185px" onClick={handleUpdate}>
+      {/* <Button right="185px" onClick={handleUpdate}>
         Update list
-      </Button>
-
+      </Button> */}
       <div className="productList">
         {loading && <Loading />}
 
@@ -268,9 +278,14 @@ export default function PlantsList() {
             getRowId={(row) => row._id}
             loading={loading}
             rowsPerPageOptions={[50]}
-          />
-        )}
+            />
+            )}
       </div>
+            {showFixed && (
+              <Link fixed={true} to="/plants/new">
+                Create new plant
+              </Link>
+            )}
     </Container>
   )
 }
