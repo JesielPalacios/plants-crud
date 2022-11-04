@@ -1,6 +1,6 @@
 'react-redux'
 import { Link as LinkRouter } from 'react-router-dom'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 export function Loading() {
   return (
@@ -154,26 +154,6 @@ export const Link = styled(LinkRouter)`
     background-color: #0f1141;
     color: #ffffff;
   }
-
-  ${(props) =>
-    props.fixed &&
-    css`
-       {
-        position: fixed;
-        background: #fff;
-        border-radius: 60px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        /* left: 0; */
-        /* margin: 0 auto; */
-        /* max-width: 400px; */
-        /* padding: 5px; */
-        position: fixed;
-        /* right: 0; */
-        /* top: -20px; */
-        transform: scale(0.5);
-        z-index: 1;
-      }
-    `}
 `
 
 export const Button = styled.button`

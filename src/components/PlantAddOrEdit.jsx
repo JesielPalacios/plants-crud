@@ -117,58 +117,58 @@ export default function PlantAddOrEdit({ title }) {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    // Swal.fire({
-    //   title: 'Do you want to save the changes?',
-    //   showDenyButton: true,
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#0f1141',
-    //   confirmButtonText: 'Save',
-    //   denyButtonText: `Don't save`
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     let timerInterval
-    //     Swal.fire({
-    //       html: 'Saving..!',
-    //       timer: 2000,
-    //       timerProgressBar: true,
-    //       didOpen: () => {
-    //         Swal.showLoading()
-    //         const b = Swal.getHtmlContainer().querySelector('b')
-    //         timerInterval = setInterval(() => {
-    //           b.textContent = Swal.getTimerLeft()
-    //         }, 100)
-    //       },
-    //       willClose: () => {
-    //         clearInterval(timerInterval)
-    //       }
-    //     }).then((result) => {
-    //       validateAndSend()
+    Swal.fire({
+      title: 'Do you want to save the changes?',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonColor: '#0f1141',
+      confirmButtonText: 'Save',
+      denyButtonText: `Don't save`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let timerInterval
+        Swal.fire({
+          html: 'Saving..!',
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading()
+            const b = Swal.getHtmlContainer().querySelector('b')
+            timerInterval = setInterval(() => {
+              b.textContent = Swal.getTimerLeft()
+            }, 100)
+          },
+          willClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then((result) => {
+          validateAndSend()
 
-    //       if (result.dismiss === Swal.DismissReason.timer) {
-    //         // console.log('I was closed by the timer')
-    //       }
-    //     })
-    //   } else if (result.isDenied) {
-    //     Swal.fire('Changes are not saved', '', 'info')
-    //   }
-    // })
+          if (result.dismiss === Swal.DismissReason.timer) {
+            // console.log('I was closed by the timer')
+          }
+        })
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+      }
+    })
 
-    createPlantService(
-      dispatch,
-      {
-        name: name,
-        discoveredAt: discoveredAt,
-        benefits: benefits,
-        medicinal: medicinal,
-        flower: flower,
-        maximumHeight: maximumHeight,
-        model: model,
-        weight: weight,
-        plantPhoto
-      },
-      title,
-      plantId
-    )
+    // createPlantService(
+    //   dispatch,
+    //   {
+    //     name: name,
+    //     discoveredAt: discoveredAt,
+    //     benefits: benefits,
+    //     medicinal: medicinal,
+    //     flower: flower,
+    //     maximumHeight: maximumHeight,
+    //     model: model,
+    //     weight: weight,
+    //     plantPhoto
+    //   },
+    //   title,
+    //   plantId
+    // )
   }
 
   const yesOrNoOptions = [

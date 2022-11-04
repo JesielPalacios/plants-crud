@@ -1,6 +1,7 @@
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
 import { DataGrid } from '@mui/x-data-grid'
-import { useEffect, useState } from 'react'
+import html2canvas from 'html2canvas'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link as LinkRouter, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -11,12 +12,11 @@ import {
 import { Seo } from './layout/Seo'
 import { Button, Link, Loading } from './Plant.styles'
 import { Container } from './PlantsList.styles'
- 
+
 export default function PlantsList() {
   const { plants, loading, error } = useSelector((state) => state.plant)
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [showFixed, setShowFixed] = useState(false)
 
   function handleDelete(id) {
     Swal.fire({
@@ -125,6 +125,7 @@ export default function PlantsList() {
                     ? 'http://localhost:3001' + params.row.plantImage
                     : 'https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg'
                 }
+
                 // alt="plant avatar image of plant"
               />
             ) : (
@@ -241,27 +242,43 @@ export default function PlantsList() {
 
   useEffect(() => {
     getAllPlantsService(dispatch)
+  }, [])
 
-    const onScroll = (e) => {
-      const newShowFixed = window.scrollY > 200
-      showFixed !== newShowFixed && setShowFixed(newShowFixed)
-    }
+  function onClickExportar() {
+    // html2canvas(document.querySelector('#plantList')).then((canvas) => {
+    //   var img = canvas.toDataURL('image/png')
+    //   var link = document.createElement('a')
+    //   link.download = 'export.png'
+    //   link.href = img
+    //   link.click()
+    // })
 
-    document.addEventListener('scroll', onScroll)
-
-    return () => document.removeEventListener('scroll', onScroll)
-  }, [showFixed])
-
+    html2canvas(document.body).then((canvas) => {
+    // html2canvas(document.querySelector('#plantList')).then((canvas) => {
+    // html2canvas(document.getElementById("plantsList")).then((canvas) => {
+      let img = canvas.toDataURL('image/png')
+      let link = document.createElement('a')
+      link.download = 'export.png'
+      link.href = img
+      link.click()
+      link.remove()
+    })
+  }
 
   return (
     <Container>
       <Seo title="Plants list" subtitle="Plant list from Warehouse Receipts" />
 
-      {/* <Link to="/plants/new">Create new plant</Link> */}
+      <Link to="/plants/new">Create new plant</Link>
 
-      {/* <Button right="185px" onClick={handleUpdate}>
+      <Button right="185px" onClick={handleUpdate}>
         Update list
-      </Button> */}
+      </Button>
+
+      <Button right="320px" onClick={onClickExportar}>
+        Print
+      </Button>
+
       <div className="productList">
         {loading && <Loading />}
 
@@ -278,14 +295,11 @@ export default function PlantsList() {
             getRowId={(row) => row._id}
             loading={loading}
             rowsPerPageOptions={[50]}
-            />
-            )}
+            id="plantsList"
+            scale="window.devicePixelRatio"
+          />
+        )}
       </div>
-            {showFixed && (
-              <Link fixed={true} to="/plants/new">
-                Create new plant
-              </Link>
-            )}
     </Container>
   )
 }
